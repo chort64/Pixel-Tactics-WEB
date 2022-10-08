@@ -4,8 +4,8 @@ let stompClient;
 let gameId;
 let playerType;
 
-let enemyField = [["", "", ""], ["", "", ""], ["", "", ""]];
-let myField = [["", "", ""], ["", "", ""], ["", "", ""]];
+// let enemyField = [["", "", ""], ["", "", ""], ["", "", ""]];
+// let myField = [["", "", ""], ["", "", ""], ["", "", ""]];
 
 let choosenCardInHand = -1;
 let choosenCellOnField = [];
@@ -243,6 +243,7 @@ function putCard(i, j, k) {
         success: function (data) {
             displayMyHand(data);
             displayMyField(data);
+            displayEnemyField(data);
             choosenCardInHand = -1;
         },
         error: function (error) {

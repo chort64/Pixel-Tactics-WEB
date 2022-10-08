@@ -16,7 +16,7 @@ function displayEnemyHand(data) {
             hand[i] = "";
         }
         let id = "e_" + (i + 1);
-        $("#" + id).text(hand[i]);
+        $("#" + id).text(hand[i].name + "(" + hand[i].health + ", " + hand[i].damage + ")");
     }
 }
 
@@ -28,8 +28,9 @@ function displayMyHand(data) {
             hand[i] = "";
         }
         let id = "m_" + (i + 1);
-        $("#" + id).text(hand[i]);
+        $("#" + id).text(hand[i].name + "(" + hand[i].health + ", " + hand[i].damage + ")");
     }
+
     for (let i = hand.length; i < 5; ++i) {
         let id = "m_" + (i + 1);
         $("#" + id).text("");
@@ -54,14 +55,14 @@ function displayCountOfMyDeck(data) {
 
 function displayEnemyField(data) {
     let enemyField = data.currentEnemy.field;
-    // console.log(enemyField);
     for (let i = 0; i < enemyField.length; ++i) {
         for (let j = 0; j < enemyField[i].length; ++j) {
             if (enemyField[i][j] === null) {
-                enemyField[i][j] = "";
+                $("#" + (2 - i) + "_" + (2 - j)).text("");
+            } else {
+                let id = (2 - i) + "_" + (2 - j);
+                $("#" + id).text(enemyField[i][j].name + "( " + enemyField[i][j].health + ", " + enemyField[i][j].damage + ")");
             }
-            let id = i + "_" + j;
-            $("#" + id).text(enemyField[i][j]);
         }
     }
 }
@@ -69,15 +70,17 @@ function displayEnemyField(data) {
 
 function displayMyField(data) {
     let myField = data.currentPlayer.field;
+    console.log(myField);
     for (let i = 0; i < myField.length; ++i) {
         for (let j = 0; j < myField[i].length; ++j) {
-            if (myField === null) {
-                myField = "";
-            }
             let id = i + "_" + (j + 3);
-            // console.log(id + " " + myField[i][j]);
+            if (myField[i][j] === null) {
+                $("#" + id).text("");
+            } else {
+                $("#" + id).text(myField[i][j].name + "( " + myField[i][j].health + ", " + myField[i][j].damage + ")");
+            }
             document.getElementById(id).style.backgroundColor = 'transparent';
-            $("#" + id).text(myField[i][j]);
+
         }
     }
 }

@@ -210,7 +210,7 @@ public class GameService {
         Card field[][] = player.getField();
 
         //хранить в карте сразу и героя, и лидера?
-        if (field[x][y].getHero().getAlive()) {
+        if (field[x][y].getAlive()) {
             throw new HeroIsNotDeadException("This Hero is not dead");
         }
 
@@ -239,7 +239,7 @@ public class GameService {
         Card playerCard = playerField[x1][y1];
         Card enemyCard = enemyField[x2][y2];
 
-        enemyCard.getHero().setHealth(enemyCard.getHero().getHealth() - playerCard.getHero().getDamage());
+        enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
         
         enemy.setField(enemyField);
         // game.setCurrentEnemy(enemy);
