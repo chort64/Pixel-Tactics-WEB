@@ -15,6 +15,7 @@ import com.example.Pixel.Tactics.controller.dto.MoveRequest;
 import com.example.Pixel.Tactics.exception.CardNotFoundException;
 import com.example.Pixel.Tactics.exception.GameIsFullException;
 import com.example.Pixel.Tactics.exception.GameNotFound;
+import com.example.Pixel.Tactics.exception.HeroIsNotDeadException;
 import com.example.Pixel.Tactics.exception.InvalidMove;
 import com.example.Pixel.Tactics.exception.MaxCardsInHandException;
 import com.example.Pixel.Tactics.exception.OccupiedPlaceException;
@@ -81,7 +82,7 @@ public class controller {
     // @PostMapping("/ChooseLeader")
 
     @PostMapping("/makeMove")
-    public ResponseEntity<Gameplay> makeMove(@RequestBody MoveRequest request) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove {
+    public ResponseEntity<Gameplay> makeMove(@RequestBody MoveRequest request) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException {
         Gameplay gameplay = gameService.MakeMove( request.getGameId(), request.getTypeOfMove()
                                                 , request.getX1(), request.getY1()
                                                 , request.getX2(), request.getY2() 

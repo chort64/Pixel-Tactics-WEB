@@ -85,7 +85,7 @@ public class GameService {
 
 
     //МОжет быть куча ошибок неправильного ввода. ДОБАВИТЬ ОШИБКИ!!
-    public Gameplay MakeMove(String gameId, String move, int... args) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove {
+    public Gameplay MakeMove(String gameId, String move, int... args) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException {
         Game game = GameStorage.getInstance().getGame(gameId);
         switch (move) {
             case ("TAKE_CARD"):
@@ -100,6 +100,9 @@ public class GameService {
                 break;
             case ("ATTACK"):
                 this.attackHero(gameId, args[0], args[1], args[2], args[3]);
+                break;
+            case ("DIG"):
+                this.deleteBody(gameId, args[0], args[1]);
                 break;
             default:
                 throw new InvalidMove("Invalid move");

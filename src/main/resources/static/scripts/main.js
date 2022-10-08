@@ -4,10 +4,12 @@ let stompClient;
 let gameId;
 let playerType;
 
+let choosenHeroForMove = [];
 let choosenHeroOnField = [];
 let choosenCardInHand = -1;
 let choosenCellOnField = [];
 var my_hand_card = []; 
+let digBody = false;
 
 function connectToSocket(gameId) {  
 
@@ -89,10 +91,7 @@ function connect_game() {
                 displayCountOfEnemyDeck(data);
                 displayCountOfMyDeck(data);
                 my_hand_card = document.querySelectorAll(".my-hand-card"); 
-                // playerType = 'O';
-                // reset();
                 connectToSocket(gameId);
-                // alert("Congrats you're playing with: " + data.user.login);
             },
             error: function (error) {
                 console.log(error);
@@ -141,7 +140,7 @@ for(var i = 0; i < 6; ++i) {
         if (text === "") {}
         else {
             choosenCardInHand = id.split("_")[1];
-            displayPossibleCells(choosenCardInHand); 
+            displayPossibleCells(); 
         }
     });
 }
@@ -167,17 +166,29 @@ function reset() {
             el.style.backgroundColor = 'transparent';
         }
     }
+    choosenHeroForMove = [];
     choosenHeroOnField = [];
     console.log("HERO ON FILED : " + choosenHeroOnField);
     choosenCardInHand = -1;
     console.log("CARD IN HAND: " + choosenCardInHand);
+    digBody = false;
 }
 
 $(".my-card").click(function () {
+    var id = $(this).attr("id");
     if (choosenCardInHand > 0) {
         var id = $(this).attr("id").split("_");
         putCard(choosenCardInHand - 0, id[0] - 0, id[1] - 3);
-    } else if (document.getElementById($(this).attr("id")).innerText != "") {
+    } else if (document.getElementById(id).innerText === "DEAD" && digBody) {
+        digDead(id.split("_")[0], id.split("_")[1] - 3);
+        reset();
+    }
+    else if (choosenHeroOnField != [] && document.getElementById($(this).attr("id")).innerText == "") {
+        var id = $(this).attr("id").split("_");
+        displayPossibleCells();
+        moveHero(choosenHeroOnField[0], choosenHeroOnField[1], id[0] - 0, id[1] - 3);
+    }
+    else if (document.getElementById($(this).attr("id")).innerText != "") {
         var id = $(this).attr("id");
         document.getElementById(id).style.backgroundColor = 'green';
         choosenHeroOnField = [id.split("_")[0] - 0, id.split("_")[1] - 3];
@@ -193,7 +204,6 @@ $(".e-card").click(function () {
         heroAttack(choosenHeroOnField[0], choosenHeroOnField[1], 2 - id.split("_")[0], 2 - id.split("_")[1]);
     }
 })
-
 
 
 function putCard(i, j, k) {
@@ -245,6 +255,70 @@ function heroAttack(x1, y1, x2, y2) {
             displayMyField(data);
             displayEnemyField(data);
             choosenHeroOnField = [];
+        },
+        error: function (error) {
+            console.log()
+            console.log(error);
+        }
+    })
+}
+
+function moveHero(x1, y1, x2, y2) {
+    console.log(x1, y1, x2, y2);
+    $.ajax({
+        url: url + "/game/makeMove",
+        type: 'POST',
+        dataType: "JSON",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "gameId": gameId,
+            "typeOfMove": "MOVE",
+            "x1" : x1,
+            "y1" : y1,
+            "x2" : x2,
+            "y2" : y2
+          }),
+        success: function (data) {
+            displayMyField(data);
+            displayEnemyField(data);
+            choosenHeroOnField = [];
+        },
+        error: function (error) {
+            console.log()
+            console.log(error);
+        }
+    })
+}
+
+
+
+function dig() {
+    for (let i = 0; i < 3; ++i) {
+        for (let j = 3; j < 6; ++j) {
+            let id = i + "_" + j;
+            let card = document.getElementById(id);
+            if (card.innerText == "DEAD") card.style.backgroundColor = "green"; 
+        }
+    }
+    digBody = true;
+}
+
+function digDead(x1, y1) {
+    $.ajax({
+        url: url + "/game/makeMove",
+        type: 'POST',
+        dataType: "JSON",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "gameId": gameId,
+            "typeOfMove": "DIG",
+            "x1" : x1,
+            "y1" : y1
+          }),
+        success: function (data) {
+            displayMyField(data);
+            displayEnemyField(data);
+            digBody = false;
         },
         error: function (error) {
             console.log()
