@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperDuperGame</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--    libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <input id="login" placeholder="Place a login here">
+    <button onclick="create_game()">Create a new game</button>
+    <input id="game_id" placeholder="Place a game id">
+    <button onclick="connect_game()">Connect to game</button>
+    <!-- Рука противника -->
+    <div class="enemy-hand row justify-content-center">
+        <div class="deck card " id="e_deck"></div>
+
+        <div class="card" id="e_1"></div>
+        <div class="card" id="e_2"></div>
+        <div class="card" id="e_3"></div>
+        <div class="card" id="e_4"></div>
+        <div class="card" id="e_5"></div>
+
+        <div class="order card " id="e_order">ORDER</div>
+    </div>
+
+    <div id="enemy-login" class="login">Login:</div>
+
+    <!-- Общее Поле -->
+    <div class="field">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="hand card field-card" id="0_0"></div>
+                <div class="hand card field-card" id="0_1"></div>
+                <div class="hand card field-card" id="0_2"></div>
+                <div class="hand card field-card first my-card" id="0_3"></div>
+                <div class="hand card field-card my-card" id="0_4"></div>
+                <div class="hand card field-card my-card" id="0_5"></div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="hand card field-card " id="1_0"></div>
+                <div class="hand card field-card " id="1_1"></div>
+                <div class="hand card field-card " id="1_2"></div>
+                <div class="hand card field-card first my-card" id="1_3"></div>
+                <div class="hand card field-card my-card" id="1_4"></div>
+                <div class="hand card field-card my-card" id="1_5"></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="hand card field-card " id="2_0"></div>
+                <div class="hand card field-card " id="2_1"></div>
+                <div class="hand card field-card " id="2_2"></div>
+                <div class="hand card field-card first my-card" id="2_3"></div>
+                <div class="hand card field-card my-card" id="2_4"></div>
+                <div class="hand card field-card my-card" id="2_5"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="my-login" class="login">Login:</div>
+
+    <!-- Моя рука -->
+    <div class="my-hand row justify-content-center">
+        <div class="deck card " id="m_deck"></div>
+        
+        <div class="hand card my-hand-card" id="m_1"></div>
+        <div class="hand card my-hand-card" id="m_2"></div>
+        <div class="hand card my-hand-card" id="m_3"></div>
+        <div class="hand card my-hand-card" id="m_4"></div>
+        <div class="hand card my-hand-card" id="m_5"></div>
+        
+        <div class="order card " id="m_order">ORDER</div>
+    </div>
+    <script src="./scripts/display.js"></script>
+    <script src="./scripts/main.js"></script>
+</body>
+</html>
