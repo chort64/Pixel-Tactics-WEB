@@ -57,10 +57,13 @@ function displayEnemyField(data) {
     let enemyField = data.currentEnemy.field;
     for (let i = 0; i < enemyField.length; ++i) {
         for (let j = 0; j < enemyField[i].length; ++j) {
+            let id = (2 - i) + "_" + (2 - j);
             if (enemyField[i][j] === null) {
                 $("#" + (2 - i) + "_" + (2 - j)).text("");
-            } else {
-                let id = (2 - i) + "_" + (2 - j);
+            } else if (enemyField[i][j].alive === false) {
+                $("#" + id).text("DEAD");
+            } 
+            else {
                 $("#" + id).text(enemyField[i][j].name + "( " + enemyField[i][j].health + ", " + enemyField[i][j].damage + ")");
             }
         }
@@ -76,6 +79,8 @@ function displayMyField(data) {
             let id = i + "_" + (j + 3);
             if (myField[i][j] === null) {
                 $("#" + id).text("");
+            } else if (myField[i][j].alive === false) {
+                $("#" + id).text("DEAD");
             } else {
                 $("#" + id).text(myField[i][j].name + "( " + myField[i][j].health + ", " + myField[i][j].damage + ")");
             }

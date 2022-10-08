@@ -4,9 +4,7 @@ let stompClient;
 let gameId;
 let playerType;
 
-// let enemyField = [["", "", ""], ["", "", ""], ["", "", ""]];
-// let myField = [["", "", ""], ["", "", ""], ["", "", ""]];
-
+let choosenHeroOnField = [];
 let choosenCardInHand = -1;
 let choosenCellOnField = [];
 var my_hand_card = []; 
@@ -59,48 +57,6 @@ function create_game() {
         })
     }
 }   
-
-// function waitUser(gameId) {
-//     console.log("waiting");
-//     console.log("GAMEID : " + gameId);
-//     $.ajax({
-//         url: url + "/game/checkGame",
-//         type: 'POST',
-//         dataType: "json",
-//         contentType: "application/json",
-//         data: JSON.stringify({
-//             "gameId": gameId
-//         }),
-//         success: function (data) {
-//             console.log(data);
-//             if (data) {
-//                 setTimeout(() => {
-//                     console.log("Delayed for 1 second.");
-//                     waitUser(gameId);
-//                   }, "2000");
-//             }
-//             else {
-//                 $.ajax({
-//                     url: url + "/game/getGame",
-//                     type: 'POST',
-//                     dataType: "json",
-//                     contentType: "application/json",
-//                     data: JSON.stringify({
-//                         "gameId": gameId
-//                     }),
-//                     success: function (data) {
-//                         alert("Your opponent is " + data.currentEnemy.login);
-//                         displayEnemyLogin(data);
-//                         displayMyHand(data);
-//                         displayEnemyHand(data);
-//                         displayCountOfEnemyDeck(data);
-//                         displayCountOfMyDeck(data);
-//                     } 
-//                 });
-//             }
-//         },
-//     });
-// }
 
 // ЛЮБЛЮ ТЕБЯ, МОЙ САМЫЙ ЛУЧШИЙ И САМЫЙ ЛЮБИМЫЙ!!!!!!!
 
@@ -202,27 +158,42 @@ function displayPossibleCells(i)  {
     }
 }
 
+function reset() {
+    console.log("RESET");
+    for (let i = 0; i < 3; ++i) {
+        for (let j = 0; j < 6; ++j) {
+            let el = document.getElementById(i + "_" + j);
+            console.log(el);
+            el.style.backgroundColor = 'transparent';
+        }
+    }
+    choosenHeroOnField = [];
+    console.log("HERO ON FILED : " + choosenHeroOnField);
+    choosenCardInHand = -1;
+    console.log("CARD IN HAND: " + choosenCardInHand);
+}
+
 $(".my-card").click(function () {
     if (choosenCardInHand > 0) {
         var id = $(this).attr("id").split("_");
         putCard(choosenCardInHand - 0, id[0] - 0, id[1] - 3);
+    } else if (document.getElementById($(this).attr("id")).innerText != "") {
+        var id = $(this).attr("id");
+        document.getElementById(id).style.backgroundColor = 'green';
+        choosenHeroOnField = [id.split("_")[0] - 0, id.split("_")[1] - 3];
+        console.log(choosenCellOnField);
     }
 });
 
 
-// for (var j = 0; j < 3; ++j) {
-//     for (var k = 3; k < 6; ++k) { 
-//         var id = j + "_" + k;
-//         $("#" + id).click(function() {
-//             console.log("newcheck" + id);
-//             if (choosenCardInHand > 0 && document.getElementById(id).innerText === "") {
-//                 var coord = id.split("_");
-//                 console.log("CHECK CHECK" + id);
-//                 putCard(choosenCardInHand - 0, coord[0] - 0, coord[1] - 3);
-//             }
-//         });
-//     }
-// }
+//выбор карты противника
+$(".e-card").click(function () {
+    var id = $(this).attr("id");
+    if (choosenHeroOnField != [] && document.getElementById(id).innerText != "") {
+        heroAttack(choosenHeroOnField[0], choosenHeroOnField[1], 2 - id.split("_")[0], 2 - id.split("_")[1]);
+    }
+})
+
 
 
 function putCard(i, j, k) {
@@ -245,6 +216,35 @@ function putCard(i, j, k) {
             displayMyField(data);
             displayEnemyField(data);
             choosenCardInHand = -1;
+        },
+        error: function (error) {
+            console.log()
+            console.log(error);
+        }
+    })
+}
+
+function heroAttack(x1, y1, x2, y2) {
+    console.log(x1, y1, x2, y2);
+    $.ajax({
+        url: url + "/game/makeMove",
+        type: 'POST',
+        dataType: "JSON",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "gameId": gameId,
+            "typeOfMove": "ATTACK",
+            "x1" : x1,
+            "y1" : y1,
+            "x2" : x2,
+            "y2" : y2
+          }),
+        success: function (data) {
+            document.getElementById(x1 + "_" + y1).style.backgroundColor = 'transparent';
+            displayMyHand(data);
+            displayMyField(data);
+            displayEnemyField(data);
+            choosenHeroOnField = [];
         },
         error: function (error) {
             console.log()

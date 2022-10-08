@@ -232,7 +232,7 @@ public class GameService {
         if (playerField[x1][y1] == null) {
             throw new CardNotFoundException("Card not found");
         }
-        if (playerField[x2][y2] == null) {
+        if (enemyField[x2][y2] == null) {
             throw new CardNotFoundException("Card not found");
         }
 
@@ -240,6 +240,7 @@ public class GameService {
         Card enemyCard = enemyField[x2][y2];
 
         enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
+        if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);
         
         enemy.setField(enemyField);
         // game.setCurrentEnemy(enemy);

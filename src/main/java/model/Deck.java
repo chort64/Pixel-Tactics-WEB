@@ -19,25 +19,22 @@ public class Deck {
 
     public Deck() {
         //Test
-        Card war = new Card(true, "Warrior", 5, 5);
-        Card mag = new Card(true, "Mage", 5, 5);
-        Card arc = new Card(true, "Archer", 5, 5);
         List<Card> cards = new ArrayList();
-        cards.add(war);
-        cards.add(war);
-        cards.add(war);
-        cards.add(war);
-        cards.add(war);
-        cards.add(mag);
-        cards.add(mag);
-        cards.add(mag);
-        cards.add(mag);
-        cards.add(mag);
-        cards.add(arc);
-        cards.add(arc);
-        cards.add(arc);
-        cards.add(arc);
-        cards.add(arc);
+        cards.add(new Card(true, "Warrior", 5, 5));
+        cards.add(new Card(true, "Warrior", 5, 5));
+        cards.add(new Card(true, "Warrior", 5, 5));
+        cards.add(new Card(true, "Warrior", 5, 5));
+        cards.add(new Card(true, "Warrior", 5, 5));
+        cards.add(new Card(true, "Mage", 5, 5));
+        cards.add(new Card(true, "Mage", 5, 5));
+        cards.add(new Card(true, "Mage", 5, 5));
+        cards.add(new Card(true, "Mage", 5, 5));
+        cards.add(new Card(true, "Mage", 5, 5));
+        cards.add(new Card(true, "Archer", 5, 5));
+        cards.add(new Card(true, "Archer", 5, 5));
+        cards.add(new Card(true, "Archer", 5, 5));
+        cards.add(new Card(true, "Archer", 5, 5));
+        cards.add(new Card(true, "Archer", 5, 5));
         //
 
         Collections.shuffle(cards);
