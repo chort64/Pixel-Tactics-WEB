@@ -19,16 +19,18 @@
     <input id="game_id" placeholder="Place a game id">
     <button onclick="connect_game()">Connect to game</button>
     <!-- Рука противника -->
-    <div class="enemy-hand row justify-content-center">
-        <div class="deck card " id="e_deck"></div>
+    <div class="container">
+        <div class="enemy-hand row justify-content-center">
+            <div class="deck card " id="e_deck"></div>
 
-        <div class="card" id="e_1"></div>
-        <div class="card" id="e_2"></div>
-        <div class="card" id="e_3"></div>
-        <div class="card" id="e_4"></div>
-        <div class="card" id="e_5"></div>
+            <div class="card" id="e_1"></div>
+            <div class="card" id="e_2"></div>
+            <div class="card" id="e_3"></div>
+            <div class="card" id="e_4"></div>
+            <div class="card" id="e_5"></div>
 
-        <div class="order card " id="e_order">ORDER</div>
+            <div class="order card " id="e_order">ORDER</div>
+        </div>
     </div>
 
     <div id="enemy-login" class="login">Login:</div>
@@ -70,20 +72,22 @@
     </div>
 
     <div id="my-login" class="login">Login:</div>
-    <button onclick="reset()">RESET</button>
+    <button onclick="reset()" class="reset">RESET</button>
     <button onclick="dig()">DIG</button>
 
     <!-- Моя рука -->
-    <div class="my-hand row justify-content-center">
-        <div class="deck card " id="m_deck"></div>
-        
-        <div class="hand card my-hand-card" id="m_1"></div>
-        <div class="hand card my-hand-card" id="m_2"></div>
-        <div class="hand card my-hand-card" id="m_3"></div>
-        <div class="hand card my-hand-card" id="m_4"></div>
-        <div class="hand card my-hand-card" id="m_5"></div>
-        
-        <div class="order card " id="m_order">ORDER</div>
+    <div class = container>
+        <div class="my-hand row justify-content-center">
+            <div class="deck card " id="m_deck"></div>
+            
+            <div class="hand card my-hand-card" id="m_1"></div>
+            <div class="hand card my-hand-card" id="m_2"></div>
+            <div class="hand card my-hand-card" id="m_3"></div>
+            <div class="hand card my-hand-card" id="m_4"></div>
+            <div class="hand card my-hand-card" id="m_5"></div>
+            
+            <div class="order card " id="m_order">ORDER</div>
+        </div>
     </div>
     <script src="./scripts/display.js"></script>
     <script src="./scripts/main.js"></script>
