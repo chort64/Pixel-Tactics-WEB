@@ -22,4 +22,8 @@ TODO List:
       - [ ] Make good background
       - [ ] Add cards images
       - [ ] Make some animation (possibly)
+      
+  # Hard changes for V2.0 :
+    - [ ] Rewrite all Backend part (with patterns and new logic of code)
+    - [ ] Rewrite all Frontend pard (control the status of game through updated data from socket (not it's work with text in div's kek))    
  
