@@ -229,6 +229,7 @@ public class GameService {
     }
 
     public Game attackHero(String gameId, String login, Integer x1, Integer y1, Integer x2, Integer y2) throws CardNotFoundException, GameNotFound {
+        System.out.println("WARNING ATTACK:" + x2 + " " + y2);
         Game game = GameStorage.getInstance().getGame(gameId);
         Player player = game.getMe(login);
         Player enemy  = game.getEnemy(login);

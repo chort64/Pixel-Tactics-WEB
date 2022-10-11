@@ -20,21 +20,21 @@ public class Deck {
     public Deck() {
         //Test
         List<Card> cards = new ArrayList();
-        cards.add(new Card(true, "Warrior", 5, 5));
-        cards.add(new Card(true, "Warrior", 5, 5));
-        cards.add(new Card(true, "Warrior", 5, 5));
-        cards.add(new Card(true, "Warrior", 5, 5));
-        cards.add(new Card(true, "Warrior", 5, 5));
-        cards.add(new Card(true, "Mage", 5, 5));
-        cards.add(new Card(true, "Mage", 5, 5));
-        cards.add(new Card(true, "Mage", 5, 5));
-        cards.add(new Card(true, "Mage", 5, 5));
-        cards.add(new Card(true, "Mage", 5, 5));
-        cards.add(new Card(true, "Archer", 5, 5));
-        cards.add(new Card(true, "Archer", 5, 5));
-        cards.add(new Card(true, "Archer", 5, 5));
-        cards.add(new Card(true, "Archer", 5, 5));
-        cards.add(new Card(true, "Archer", 5, 5));
+        cards.add(new Card(true, "Warrior1", 5, 5));
+        cards.add(new Card(true, "Warrior2", 5, 5));
+        cards.add(new Card(true, "Warrior3", 5, 5));
+        cards.add(new Card(true, "Warrior4", 5, 5));
+        cards.add(new Card(true, "Warrior5", 5, 5));
+        cards.add(new Card(true, "Mage1", 5, 5));
+        cards.add(new Card(true, "Mage2", 5, 5));
+        cards.add(new Card(true, "Mage3", 5, 5));
+        cards.add(new Card(true, "Mage4", 5, 5));
+        cards.add(new Card(true, "Mage5", 5, 5));
+        cards.add(new Card(true, "Archer1", 5, 5));
+        cards.add(new Card(true, "Archer2", 5, 5));
+        cards.add(new Card(true, "Archer3", 5, 5));
+        cards.add(new Card(true, "Archer4", 5, 5));
+        cards.add(new Card(true, "Archer5", 5, 5));
         //
 
         Collections.shuffle(cards);

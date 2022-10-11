@@ -229,7 +229,7 @@ $(".my-card").click(function () {
 //выбор карты противника
 $(".e-card").click(function () {
     var id = $(this).attr("id");
-    if (choosenHeroOnField != [] && document.getElementById(id).innerText != "" && playerType == whoMove) {
+    if (choosenHeroOnField != [] && document.getElementById(id).innerText != "" && playerType === whoMove) {
         heroAttack(choosenHeroOnField[0], choosenHeroOnField[1], 2 - id.split("_")[0], 2 - id.split("_")[1]);
     }
 })
@@ -304,7 +304,7 @@ function moveHero(x1, y1, x2, y2) {
         dataType: "JSON",
         contentType: "application/json",
         data: JSON.stringify({
-            "gameId": gameId,
+            "gameId": gameID,
             "login": playerLogin,
             "typeOfMove": "MOVE",
             "x1" : x1,
