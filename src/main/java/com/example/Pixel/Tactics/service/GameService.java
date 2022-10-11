@@ -3,6 +3,8 @@ package com.example.Pixel.Tactics.service;
 import model.Game;
 import model.GameStatus;
 import model.Gameplay;
+import model.Hero;
+import model.Leader;
 import model.Player;
 import model.User;
 
@@ -71,8 +73,8 @@ public class GameService {
 
         game.setCurrentWave(1);      //Текущая волна - первая
         // game.setWhoIsMove((int) (Math.random() * 10) % 2);
-        game.setRound(0);
-        game.setMoves(2);
+        game.setRound(-1);
+        game.setMoves(1);
 
         game.setGameStatus(GameStatus.IN_PROCESS);
 
@@ -114,7 +116,17 @@ public class GameService {
 
         //Возможно добавить метод инкремента для волны,очереди хода, раунда
         game.setMoves(game.getMoves() - 1);
-        if (game.getMoves() == 0) { 
+
+        if (game.getRound() == -1) {
+
+            game.setWhoMove((game.getWhoMove() + 1) % 2);
+            if (game.getWhoMove() != game.getTurn()) {
+                game.setMoves(1);
+            } else {
+                game.setRound(1);
+                game.setMoves(2);
+            }
+        } else if (game.getMoves() <= 0) { 
             game.setWhoMove((game.getWhoMove() + 1) % 2);
             System.out.println(game.getWhoMove());
             if (game.getWhoMove() == game.getTurn()) {
@@ -128,7 +140,7 @@ public class GameService {
             }
             game.setMoves(2);
         };
-        
+
         GameStorage.getInstance().setGame(game);
         return game.gameToGameplay();
     }
@@ -146,18 +158,25 @@ public class GameService {
     }
         
 
-    public Game putCard(String gameId, String login, Integer numberOfCard, Integer xCoord, Integer yCoord) throws CardNotFoundException, OccupiedPlaceException, GameNotFound {
+    public Game putCard(String gameId, String login, Integer numberOfCard, int xCoord, int yCoord) throws CardNotFoundException, OccupiedPlaceException, GameNotFound {
         Game game = GameStorage.getInstance().getGame(gameId);
 
         Player player = game.getMe(login);
 
-        System.out.println("TEST !!!!!!!!!!!!!!");
-        System.out.println(player);
+        // System.out.println("TEST !!!!!!!!!!!!!!");
+        // System.out.println(player);
 
         Vector<Card> hand = player.getHand();       //Поменять тип данных с вектора на список?
+        System.out.println(xCoord + " " +  yCoord + " " + game.getRound());
+        System.out.println(game.getRound().intValue() < 0);
+        System.out.println(xCoord != 1);
+        System.out.println(yCoord != 1);
+        System.out.println(game.getRound() < 0 && (xCoord != 1 || yCoord != 1));
 
         if (hand.size() < numberOfCard - 1) {
             throw new CardNotFoundException("You don't have card with this number");
+        } else if (game.getRound() < 0 && (xCoord != 1 || yCoord != 1)) {
+            throw new CardNotFoundException("Choose leader place"); //Поменять ошибку
         }
         
         Card card = player.takeCardFromHand(numberOfCard - 1); //Нужно ли минус один? вроде да
@@ -165,6 +184,12 @@ public class GameService {
 
         if (field[xCoord][yCoord] != null) {
             throw new OccupiedPlaceException("This place if occupied");
+        }
+
+        if (xCoord == 1 && yCoord == 1) {
+            card.newLeader(); 
+        } else {
+            card.newHero();
         }
 
         field[xCoord][yCoord] = card;
@@ -197,6 +222,8 @@ public class GameService {
                                                                                 //и изменить ошибку, что нет карты на руке
         } else if (field[xCoord2][yCoord2] != null) {
             throw new OccupiedPlaceException("This place is occupied");
+        } else if (xCoord1 == 1 && yCoord1 == 1) {
+            throw new OccupiedPlaceException("You can move Leader"); //Исправить на другую ошибку
         }
 
         Card card = field[xCoord1][yCoord1];
@@ -245,6 +272,7 @@ public class GameService {
 
         Card playerCard = playerField[x1][y1];
         Card enemyCard = enemyField[x2][y2];
+
 
         enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
         if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);

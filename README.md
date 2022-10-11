@@ -11,8 +11,8 @@ Transferring the "Pixel tactics" board game to the browser
     
  ## Make next updates:
   - [x] Make normal user view for every player (now it's looks like you play versus yourself)
-  - [ ] Rewrite Card class (he have to contain Hero object and Leader object)
-  - [ ] Add "Leader choose" round
+  - [x] Rewrite Card class (he have to contain Hero object and Leader object)
+  - [x] Add "Leader choose" round
   - [ ] Add walking on the current wave
   - [ ] Rewrite player's moves changes
   - [ ] Add all main heroes from original game

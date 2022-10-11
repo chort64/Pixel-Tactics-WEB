@@ -4,6 +4,7 @@ const url = 'http://localhost:8080';
 let playerLogin;
 let stompClient;
 let gameID;
+let round = -1;
 
 let playerType;
 let currentData;
@@ -30,10 +31,11 @@ function connectToSocket(gameId) {
             console.log("WHOMOVE" + data.whoMove);
             displayWhoMove(data);
             whoMove = data.whoMove;
+            round = data.round;
             displayEnemyLogin(data);
             displayMyLogin(data);
             displayMyHand(data);
-            displayEnemyHand(data);
+            // displayEnemyHand(data);
             displayMyField(data);
             displayEnemyField(data);
             displayCountOfMyDeck(data);
@@ -110,7 +112,7 @@ function connect_game() {
                 displayEnemyLogin(data);
                 displayMyLogin(data);
                 displayMyHand(data);
-                displayEnemyHand(data);
+                // displayEnemyHand(data);
                 displayCountOfEnemyDeck(data);
                 displayCountOfMyDeck(data);
                 my_hand_card = document.querySelectorAll(".my-hand-card"); 
@@ -174,14 +176,20 @@ for(var i = 0; i < 6; ++i) {
 }
 
 function displayPossibleCells(i)  {
-    for (var j = 0; j < 3; ++j) {
-        for (var k = 3; k < 6; ++k) {
-            var id = j + "_" + k;
-            var element = document.getElementById(id);
-            if (element.innerText === "") {
-                element.style.backgroundColor = 'green';
+    console.log("ROUND: " + round);
+    if (round < 0) {
+        var element = document.getElementById("1_4");
+        element.style.backgroundColor = "green";
+    } else {
+        for (var j = 0; j < 3; ++j) {
+            for (var k = 3; k < 6; ++k) {
+                var id = j + "_" + k;
+                var element = document.getElementById(id);
+                if (element.innerText === "") {
+                    element.style.backgroundColor = 'green';
+                }
             }
-        }
+        }    
     }
 }
 
@@ -344,7 +352,8 @@ function digDead(x1, y1) {
         dataType: "JSON",
         contentType: "application/json",
         data: JSON.stringify({
-            "gameId": gameId,
+            "gameId": gameID,
+            "login": playerLogin,
             "typeOfMove": "DIG",
             "x1" : x1,
             "y1" : y1

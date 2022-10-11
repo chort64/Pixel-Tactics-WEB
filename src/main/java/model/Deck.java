@@ -20,21 +20,35 @@ public class Deck {
     public Deck() {
         //Test
         List<Card> cards = new ArrayList();
-        cards.add(new Card(true, "Warrior1", 5, 5));
-        cards.add(new Card(true, "Warrior2", 5, 5));
-        cards.add(new Card(true, "Warrior3", 5, 5));
-        cards.add(new Card(true, "Warrior4", 5, 5));
-        cards.add(new Card(true, "Warrior5", 5, 5));
-        cards.add(new Card(true, "Mage1", 5, 5));
-        cards.add(new Card(true, "Mage2", 5, 5));
-        cards.add(new Card(true, "Mage3", 5, 5));
-        cards.add(new Card(true, "Mage4", 5, 5));
-        cards.add(new Card(true, "Mage5", 5, 5));
-        cards.add(new Card(true, "Archer1", 5, 5));
-        cards.add(new Card(true, "Archer2", 5, 5));
-        cards.add(new Card(true, "Archer3", 5, 5));
-        cards.add(new Card(true, "Archer4", 5, 5));
-        cards.add(new Card(true, "Archer5", 5, 5));
+        Hero war1 = new Hero(true, "War1", 10, 4);
+        Hero war2 = new Hero(true, "War2", 10, 4);
+        Hero war3 = new Hero(true, "War3", 10, 4);
+
+        Hero arc1 = new Hero(true, "Arc1", 3, 6);
+        Hero arc2 = new Hero(true, "Arc2", 3, 6);
+        Hero arc3 = new Hero(true, "Arc3", 3, 6);
+
+        Hero mag1 = new Hero(true, "Mag1", 1, 8);
+        Hero mag2 = new Hero(true, "Mag2", 1, 8);
+        Hero mag3 = new Hero(true, "Mag3", 1, 8);
+
+        Leader warrior = new Leader(true, "Warrior", 30, 5);
+        Leader archer = new Leader(true, "Archer", 20, 5);
+        Leader mage = new Leader(true, "Mage", 10, 10);
+
+        cards.add(new Card(war1, warrior));
+        cards.add(new Card(war2, warrior));
+        cards.add(new Card(war3, warrior));
+
+        cards.add(new Card(arc1, archer));
+        cards.add(new Card(arc2, archer));
+        cards.add(new Card(arc3, archer));
+
+        cards.add(new Card(mag1, mage));
+        cards.add(new Card(mag2, mage));
+        cards.add(new Card(mag3, mage));
+
+        
         //
 
         Collections.shuffle(cards);

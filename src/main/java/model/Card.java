@@ -13,14 +13,35 @@ import lombok.Setter;
 
 //Продумать логику того, как у меня соответствуют карты в плане герой <-> лидер.
 @Data
-@AllArgsConstructor
 public class Card {
+
+    private Hero hero;
+    private Leader leader;
+
     private Boolean alive;
     private String name;
     private Integer health;
     private Integer damage;
-}
 
+    public Card(Hero hero, Leader leader) {
+        this.hero = hero;
+        this.leader = leader;
+    }
+
+    public void newHero() {
+        alive = true;
+        this.name = this.hero.getName();
+        this.health = this.hero.getHealth();
+        this.damage = this.hero.getDamage();
+    }
+
+    public void newLeader() {
+        alive = true;
+        this.name = this.leader.getName();
+        this.health = this.leader.getHealth();
+        this.damage = this.leader.getDamage();
+    }
+}
 
 // public enum Card {
 

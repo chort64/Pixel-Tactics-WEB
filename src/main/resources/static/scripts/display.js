@@ -40,7 +40,7 @@ function displayEnemyHand(data) {
 }
 
 function displayMyHand(data) {
-
+    let round = data.round;
     let hand = getMe(data, playerLogin).hand;
     // let hand = data.currentPlayer.hand;
 
@@ -49,7 +49,11 @@ function displayMyHand(data) {
             hand[i] = "";
         }
         let id = "m_" + (i + 1);
-        $("#" + id).text(hand[i].name + "(" + hand[i].health + ", " + hand[i].damage + ")");
+        if (round === -1) {
+            $("#" + id).text(hand[i].leader.name + "(" + hand[i].leader.health + ", " + hand[i].leader.damage + ")");
+        } else {
+            $("#" + id).text(hand[i].hero.name + "(" + hand[i].hero.health + ", " + hand[i].hero.damage + ")");
+        }
     }
 
     for (let i = hand.length; i < 5; ++i) {
