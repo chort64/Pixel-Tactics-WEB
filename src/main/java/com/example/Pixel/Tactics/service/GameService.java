@@ -170,16 +170,14 @@ public class GameService {
         // System.out.println(player);
 
         Vector<Card> hand = player.getHand();       //Поменять тип данных с вектора на список?
-        System.out.println(xCoord + " " +  yCoord + " " + game.getRound());
-        System.out.println(game.getRound().intValue() < 0);
-        System.out.println(xCoord != 1);
-        System.out.println(yCoord != 1);
-        System.out.println(game.getRound() < 0 && (xCoord != 1 || yCoord != 1));
+        Integer wave = game.getCurrentWave();
 
         if (hand.size() < numberOfCard - 1) {
             throw new CardNotFoundException("You don't have card with this number");
         } else if (game.getRound() < 0 && (xCoord != 1 || yCoord != 1)) {
             throw new CardNotFoundException("Choose leader place"); //Поменять ошибку
+        } else if (yCoord != wave - 1 && game.getRound() >= 0) {
+            throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
         }
         
         Card card = player.takeCardFromHand(numberOfCard - 1); //Нужно ли минус один? вроде да
@@ -271,6 +269,11 @@ public class GameService {
         }
         if (enemyField[x2][y2] == null) {
             throw new CardNotFoundException("Card not found");
+        }
+
+        Integer wave = game.getCurrentWave();
+        if (y1 != wave - 1 && game.getRound() >= 0) {
+            throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
         }
 
         Card playerCard = playerField[x1][y1];

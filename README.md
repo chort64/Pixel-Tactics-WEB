@@ -14,7 +14,7 @@ Transferring the "Pixel tactics" board game to the browser
   - [x] Rewrite Card class (he have to contain Hero object and Leader object)
   - [x] Add "Leader choose" round
   - [x] Add winner check  
-  - [ ] Add walking on the current wave
+  - [x] Add walking on the current wave
   - [ ] Rewrite player's moves changes
   - [ ] Add all main heroes from original game
   - [ ] Add spells for every hero

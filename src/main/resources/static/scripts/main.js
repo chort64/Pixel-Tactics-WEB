@@ -5,6 +5,7 @@ let playerLogin;
 let stompClient;
 let gameID;
 let round = -1;
+let wave;
 
 let gameOn = true;
 
@@ -38,6 +39,7 @@ function connectToSocket(gameId) {
             displayWhoMove(data);
             whoMove = data.whoMove;
             round = data.round;
+            wave = data.wave;
             displayEnemyLogin(data);
             displayMyLogin(data);
             displayMyHand(data);
@@ -190,15 +192,25 @@ function displayPossibleCells(i)  {
         element.style.backgroundColor = "green";
     } else if (whoMove === playerType) {
         for (var j = 0; j < 3; ++j) {
-            for (var k = 3; k < 6; ++k) {
-                var id = j + "_" + k;
-                var element = document.getElementById(id);
-                if (element.innerText === "") {
-                    element.style.backgroundColor = 'green';
-                }
+            var id = j + "_" + (wave + 2);
+            console.log(id);
+            var element = document.getElementById(id);
+            if (element.innerText === "") {
+                element.style.backgroundColor = 'green';
             }
         }    
     }
+    // else if (whoMove === playerType) {
+    //     for (var j = 0; j < 3; ++j) {
+    //         for (var k = 3; k < 6; ++k) {
+    //             var id = j + "_" + k;
+    //             var element = document.getElementById(id);
+    //             if (element.innerText === "") {
+    //                 element.style.backgroundColor = 'green';
+    //             }
+    //         }
+    //     }    
+    // }
 }
 
 function reset() {
