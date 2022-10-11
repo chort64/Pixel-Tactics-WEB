@@ -110,7 +110,6 @@ public class GameService {
             default:
                 throw new InvalidMove("Invalid move");
         }
-
         //turn = 0; whoMove = 0;
         //whoMove = (whoMove + 1) % 2;
 
@@ -140,6 +139,10 @@ public class GameService {
             }
             game.setMoves(2);
         };
+
+        if (game.getRound() >= 0 && game.getEnemy(login).getField()[1][1].getHealth() <= 0) {
+            game.setWinner(login);
+        }
 
         GameStorage.getInstance().setGame(game);
         return game.gameToGameplay();

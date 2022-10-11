@@ -34,6 +34,7 @@ public class Gameplay {
 
     private Player player1;
     private Player player2;
+    private String winner;
 
     // private Player currentPlayer;
     // private Player currentEnemy;
@@ -48,6 +49,7 @@ public class Gameplay {
         this.moves = game.getMoves();
         this.player1 = game.getPlayer1();
         this.player2 = game.getPlayer2();
+        this.winner = game.getWinner();
         // this.currentPlayer = game.getCurrentPlayer();
         // this.currentEnemy = game.getCurrentEnemy();
     }

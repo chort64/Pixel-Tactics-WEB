@@ -6,6 +6,8 @@ let stompClient;
 let gameID;
 let round = -1;
 
+let gameOn = true;
+
 let playerType;
 let currentData;
 let whoMove;
@@ -29,6 +31,10 @@ function connectToSocket(gameId) {
             let data = JSON.parse(response.body);
             console.log(data);
             console.log("WHOMOVE" + data.whoMove);
+            if (data.winner != null) {
+                alert("Winner is " + data.winner);
+                gameOn = false;
+            }
             displayWhoMove(data);
             whoMove = data.whoMove;
             round = data.round;
@@ -133,7 +139,8 @@ $("#m_deck").click(function (){
     var deck = document.getElementById("m_deck");
     var text = deck.innerHTML.split(":")[1];  //число оставшихся карт
 
-    if (text > 0 && playerType == whoMove) {
+    if (playerType != whoMove) {}
+    else if (text > 0) {
         //http запрос
         $.ajax({
             url: url + "/game/makeMove",
@@ -177,10 +184,11 @@ for(var i = 0; i < 6; ++i) {
 
 function displayPossibleCells(i)  {
     console.log("ROUND: " + round);
-    if (round < 0) {
+    if (!gameOn) {}
+    else if (round < 0) {
         var element = document.getElementById("1_4");
         element.style.backgroundColor = "green";
-    } else {
+    } else if (whoMove === playerType) {
         for (var j = 0; j < 3; ++j) {
             for (var k = 3; k < 6; ++k) {
                 var id = j + "_" + k;
@@ -212,7 +220,8 @@ function reset() {
 
 $(".my-card").click(function () {
     var id = $(this).attr("id");
-    if (whoMove != playerType) {}
+    if (!gameOn) {}
+    else if (whoMove != playerType) {}
     else if (choosenCardInHand > 0) {
         var id = $(this).attr("id").split("_");
         putCard(choosenCardInHand - 0, id[0] - 0, id[1] - 3);

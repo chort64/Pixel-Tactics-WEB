@@ -14,7 +14,7 @@ public class Game {
     private Player player1;     //Поменять сеттер/геттер может быть
     private Player player2;
     private Integer whoMove;
-    private Player winner;
+    private String winner;
     private Integer currentWave;
     private Integer turn;
     private Integer round;
