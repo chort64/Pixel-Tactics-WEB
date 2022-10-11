@@ -17,7 +17,9 @@ import com.example.Pixel.Tactics.exception.GameIsFullException;
 import com.example.Pixel.Tactics.exception.GameNotFound;
 import com.example.Pixel.Tactics.exception.HeroIsNotDeadException;
 import com.example.Pixel.Tactics.exception.InvalidMove;
+import com.example.Pixel.Tactics.exception.LoginIsBusy;
 import com.example.Pixel.Tactics.exception.MaxCardsInHandException;
+import com.example.Pixel.Tactics.exception.NotYourMove;
 import com.example.Pixel.Tactics.exception.OccupiedPlaceException;
 import com.example.Pixel.Tactics.service.GameService;
 import com.example.Pixel.Tactics.storage.GameStorage;
@@ -53,7 +55,7 @@ public class controller {
     }
 
     @PostMapping("/connectToGame")
-    public ResponseEntity<Gameplay> ConnectToGame(@RequestBody ConnectRequest request) throws GameIsFullException, GameNotFound {
+    public ResponseEntity<Gameplay> ConnectToGame(@RequestBody ConnectRequest request) throws GameIsFullException, GameNotFound, LoginIsBusy {
         Gameplay gameplay = gameService.connectToGame(request.getUser(), request.getGameId()).gameToGameplay();
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + request.getGameId(), gameplay); //что
         return ResponseEntity.ok(gameplay);
@@ -82,8 +84,9 @@ public class controller {
     // @PostMapping("/ChooseLeader")
 
     @PostMapping("/makeMove")
-    public ResponseEntity<Gameplay> makeMove(@RequestBody MoveRequest request) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException {
-        Gameplay gameplay = gameService.MakeMove( request.getGameId(), request.getTypeOfMove()
+    public ResponseEntity<Gameplay> makeMove(@RequestBody MoveRequest request) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException, NotYourMove {
+        Gameplay gameplay = gameService.MakeMove( request.getGameId(), request.getLogin()
+                                                , request.getTypeOfMove()
                                                 , request.getX1(), request.getY1()
                                                 , request.getX2(), request.getY2() 
                                                 );

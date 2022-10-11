@@ -13,13 +13,26 @@ public class Game {
 
     private Player player1;     //Поменять сеттер/геттер может быть
     private Player player2;
+    private Integer whoMove;
     private Player winner;
     private Integer currentWave;
     private Integer turn;
     private Integer round;
     private Integer moves;
 
+    
+    public Player getMe(String login) {
+        if (this.getPlayer1().getLogin().equals(login)) return this.getPlayer1();
+        else return this.getPlayer2();
+    }
+
+    public Player getEnemy(String login) {
+        if (this.getPlayer1().getLogin().equals(login)) return this.getPlayer2();
+        else return this.getPlayer1();
+    }
+
     // В зависимости от того, чей щас ход, будем получать игрока, который ходит
+    // Переписать всю логику вокруг turn
     public Player getCurrentPlayer() {
         if (this.turn == 0) {
             return player1;
