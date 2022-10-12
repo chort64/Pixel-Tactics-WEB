@@ -15,7 +15,7 @@ Transferring the "Pixel tactics" board game to the browser
   - [x] Add "Leader choose" round
   - [x] Add winner check  
   - [x] Add walking on the current wave
-  - [ ] Rewrite player's moves changes
+  - [x] Rewrite player's moves changes (one hero can't move twice for wave)
   - [ ] Add all main heroes from original game
   - [ ] Add spells for every hero
   - [ ] Add spells for every leader
@@ -23,11 +23,13 @@ Transferring the "Pixel tactics" board game to the browser
     - [ ] Make good background
     - [ ] Add cards images
     - [ ] Make some animation (possibly)
-      
-## Hard changes for V2.0 :
+    
+## Big changes for V2.0 :
   - [ ] Rewrite all Backend part (with patterns and new logic of code)
   - [ ] Rewrite all Frontend pard (control the status of game through updated data from socket (not it's work with text in div's kek))    
+    - [ ] MayBe use js framework like react, vue and etc.
   - [ ] Add portal page
   - [ ] Add DataBases for gameStorage, userStorage
+  - [ ] Add Spring Security
   - [ ] Maybe change STOMP on WebSocket
   - [ ] Add chat to game page

@@ -9,10 +9,12 @@ function getEnemy(data, login) {
 }
 
 function displayWhoMove (data) {
+    let wave = data.wave;
+    let moves = data.moves;
     if (data.whoMove == 0) {
-        $("#whoMove").text("Move: " + data.player1.login);
+        $("#whoMove").text("Who move: " + data.player1.login + "   Move: " + moves + "   Wave: " + wave);
     } else {
-        $("#whoMove").text("Move: " + data.player2.login);
+        $("#whoMove").text("Who move: " + data.player2.login + "   Move: " + moves + "   Wave: " + wave);
     }
 }
 

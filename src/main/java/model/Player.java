@@ -38,4 +38,10 @@ public class Player {
         this.hand.remove(card);
         return card;
     }
+
+    public void updateCardsStatus() {
+        for (Card[] row : field)
+            for (Card card : row)
+                if (card != null) card.setReadyToMove(true);
+    }
 }

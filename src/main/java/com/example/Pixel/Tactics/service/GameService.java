@@ -86,7 +86,14 @@ public class GameService {
     //МОжет быть куча ошибок неправильного ввода. ДОБАВИТЬ ОШИБКИ!!
     public Gameplay MakeMove(String gameId, String login, String move, int... args) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException, NotYourMove {
         Game game = GameStorage.getInstance().getGame(gameId);
-        if (game.getWhoMove() == 0 && !game.getPlayer1().getLogin().equals(login) 
+        System.out.println(game.getWhoMove());
+        System.out.println(game.getPlayer1().getLogin());
+        System.out.println(game.getPlayer2().getLogin());
+        System.out.println(login);
+        System.out.println("first check:" + (game.getWhoMove() == 0 && !game.getPlayer1().getLogin().equals(login)));
+        System.out.println("second check:" + (game.getWhoMove() == 1 && !game.getPlayer2().getLogin().equals(login)));
+        System.out.println();
+        if ((game.getWhoMove() == 0 && !game.getPlayer1().getLogin().equals(login)) 
         || (game.getWhoMove() == 1 && !game.getPlayer2().getLogin().equals(login))) {
             throw new NotYourMove("It's not your move");
         }
@@ -124,9 +131,13 @@ public class GameService {
             } else {
                 game.setRound(1);
                 game.setMoves(2);
+                game.getMe(login).updateCardsStatus();
+                game.getEnemy(login).updateCardsStatus();
             }
         } else if (game.getMoves() <= 0) { 
+            game.getMe(login).updateCardsStatus();
             game.setWhoMove((game.getWhoMove() + 1) % 2);
+
             System.out.println(game.getWhoMove());
             if (game.getWhoMove() == game.getTurn()) {
                 game.setCurrentWave(game.getCurrentWave() + 1);
@@ -166,9 +177,6 @@ public class GameService {
 
         Player player = game.getMe(login);
 
-        // System.out.println("TEST !!!!!!!!!!!!!!");
-        // System.out.println(player);
-
         Vector<Card> hand = player.getHand();       //Поменять тип данных с вектора на список?
         Integer wave = game.getCurrentWave();
 
@@ -193,6 +201,7 @@ public class GameService {
             card.newHero();
         }
 
+        card.setReadyToMove(false);
         field[xCoord][yCoord] = card;
         player.setField(field);
 
@@ -228,8 +237,14 @@ public class GameService {
         }
 
         Card card = field[xCoord1][yCoord1];
+
+        if (!card.getReadyToMove()) {
+            throw new OccupiedPlaceException("This hero can't move more in this wave"); //Поменять ошибку
+        }
+
         field[xCoord1][yCoord1] = null;
         field[xCoord2][yCoord2] = card;
+        card.setReadyToMove(false);
         player.setField(field);
         // game.setCurrentPlayer(player);
 
@@ -277,12 +292,18 @@ public class GameService {
         }
 
         Card playerCard = playerField[x1][y1];
+
+        if (!playerCard.getReadyToMove()) {
+            throw new CardNotFoundException("You cant't attack with this hero this wave");
+        }
+
         Card enemyCard = enemyField[x2][y2];
 
 
         enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
         if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);
-        
+       
+        playerCard.setReadyToMove(false);
         enemy.setField(enemyField);
         // game.setCurrentEnemy(enemy);
 
