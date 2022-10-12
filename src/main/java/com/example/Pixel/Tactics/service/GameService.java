@@ -1,15 +1,12 @@
 package com.example.Pixel.Tactics.service;
 
 import model.Game;
-import model.GameStatus;
 import model.Gameplay;
-import model.Hero;
-import model.Leader;
 import model.Player;
 import model.User;
 
+import java.util.ArrayList;
 import java.util.UUID;
-import java.util.Vector;
 
 import org.springframework.stereotype.Service;
 
@@ -33,281 +30,24 @@ public class GameService {
         Game game = new Game();
         // game.setGameId(UUID.randomUUID().toString());
         game.setGameId("1");
-        game.setGameStatus(GameStatus.NEW);
         game.setUser1(user1);
-        game.setTurn((int) (Math.random() * 10) % 2);
-        game.setWhoMove(game.getTurn());
-        game.setPlayer1(new Player(user1));
         GameStorage.getInstance().setGame(game);
 
         return game;
     }
 
-
-    public Game connectToGame(User user2, String gameId) throws GameIsFullException, GameNotFound, LoginIsBusy {
-
-        System.out.println("GAMEID: " + gameId);
+    public Gameplay connectToGame(User user2, String gameId) throws GameIsFullException, GameNotFound, LoginIsBusy {
         Game game = GameStorage.getInstance().getGame(gameId);
+
         if (game.getUser2() != null) {
             throw new GameIsFullException("Game if full.");
         } else if (game.getUser1().getLogin().equals(user2.getLogin())) {
-            System.out.println("changeLogin");
             user2.setLogin(user2.getLogin() + "(1)");
         } 
+
         game.setUser2(user2);
-        GameStorage.getInstance().setGame(game);
-        return startGame(gameId);
-    }
-
-    //ПРоработать лучше начало игры
-    public Game startGame(String gameId) throws GameNotFound {
-        Game game = GameStorage.getInstance().getGame(gameId);
-
-        //Рандомно назначаем игроков
-        // game.setPlayer1(new Player(game.getUser1()));
-        game.setPlayer2(new Player(game.getUser2()));
-
-        //Создание полей для каждого игрока
-        game.getPlayer1().setField(new Card[3][3]); //Почему я решил сделать отдельно поле для каждого?
-        game.getPlayer2().setField(new Card[3][3]);
-
-        game.setCurrentWave(1);      //Текущая волна - первая
-        // game.setWhoIsMove((int) (Math.random() * 10) % 2);
-        game.setRound(-1);
-        game.setMoves(1);
-
-        game.setGameStatus(GameStatus.IN_PROCESS);
-
-        GameStorage.getInstance().setGame(game);
-        return game;
-    }
-
-
-    //МОжет быть куча ошибок неправильного ввода. ДОБАВИТЬ ОШИБКИ!!
-    public Gameplay MakeMove(String gameId, String login, String move, int... args) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException, NotYourMove {
-        Game game = GameStorage.getInstance().getGame(gameId);
-        System.out.println(game.getWhoMove());
-        System.out.println(game.getPlayer1().getLogin());
-        System.out.println(game.getPlayer2().getLogin());
-        System.out.println(login);
-        System.out.println("first check:" + (game.getWhoMove() == 0 && !game.getPlayer1().getLogin().equals(login)));
-        System.out.println("second check:" + (game.getWhoMove() == 1 && !game.getPlayer2().getLogin().equals(login)));
-        System.out.println();
-        if ((game.getWhoMove() == 0 && !game.getPlayer1().getLogin().equals(login)) 
-        || (game.getWhoMove() == 1 && !game.getPlayer2().getLogin().equals(login))) {
-            throw new NotYourMove("It's not your move");
-        }
-
-        switch (move) {
-            case ("TAKE_CARD"):
-                this.takeCard(gameId, login);
-                break;
-            case ("PUT_CARD"):
-                 this.putCard(gameId, login, args[0], args[1], args[2]);
-                break;
-            case ("MOVE"): 
-                this.moveCard(gameId, login, args[0], args[1], args[2], args[3]);
-                break;
-            case ("ATTACK"):
-                this.attackHero(gameId, login, args[0], args[1], args[2], args[3]);
-                break;
-            case ("DIG"):
-                this.deleteBody(gameId,login, args[0], args[1]);
-                break;
-            default:
-                throw new InvalidMove("Invalid move");
-        }
-        //turn = 0; whoMove = 0;
-        //whoMove = (whoMove + 1) % 2;
-
-        //Возможно добавить метод инкремента для волны,очереди хода, раунда
-        game.setMoves(game.getMoves() - 1);
-
-        if (game.getRound() == -1) {
-
-            game.setWhoMove((game.getWhoMove() + 1) % 2);
-            if (game.getWhoMove() != game.getTurn()) {
-                game.setMoves(1);
-            } else {
-                game.setRound(1);
-                game.setMoves(2);
-                game.getMe(login).updateCardsStatus();
-                game.getEnemy(login).updateCardsStatus();
-            }
-        } else if (game.getMoves() <= 0) { 
-            game.getMe(login).updateCardsStatus();
-            game.setWhoMove((game.getWhoMove() + 1) % 2);
-
-            System.out.println(game.getWhoMove());
-            if (game.getWhoMove() == game.getTurn()) {
-                game.setCurrentWave(game.getCurrentWave() + 1);
-                if (game.getCurrentWave() == 4) {
-                    game.setCurrentWave(1);
-                    game.setRound(game.getRound() + 1);
-                    game.setTurn((game.getTurn() + 1) % 2);
-                    game.setWhoMove(game.getTurn());
-                }
-            }
-            game.setMoves(2);
-        };
-
-        if (game.getRound() >= 0 && game.getEnemy(login).getField()[1][1].getHealth() <= 0) {
-            game.setWinner(login);
-        }
-
-        GameStorage.getInstance().setGame(game);
-        return game.gameToGameplay();
-    }
-    
-
-    public Game takeCard(String gameId, String login) throws MaxCardsInHandException, GameNotFound {
-        Game game = GameStorage.getInstance().getGame(gameId);
-        Player player = game.getMe(login);
-        if (player.getHand().size() == 5) {
-            throw new MaxCardsInHandException("You have max count of cards in hand.");
-        } 
-        player.takeCardFromDeck();
-        GameStorage.setGame(game);
-        return game;
-    }
-        
-
-    public Game putCard(String gameId, String login, Integer numberOfCard, int xCoord, int yCoord) throws CardNotFoundException, OccupiedPlaceException, GameNotFound {
-        Game game = GameStorage.getInstance().getGame(gameId);
-
-        Player player = game.getMe(login);
-
-        Vector<Card> hand = player.getHand();       //Поменять тип данных с вектора на список?
-        Integer wave = game.getCurrentWave();
-
-        if (hand.size() < numberOfCard - 1) {
-            throw new CardNotFoundException("You don't have card with this number");
-        } else if (game.getRound() < 0 && (xCoord != 1 || yCoord != 1)) {
-            throw new CardNotFoundException("Choose leader place"); //Поменять ошибку
-        } else if (yCoord != wave - 1 && game.getRound() >= 0) {
-            throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
-        }
-        
-        Card card = player.takeCardFromHand(numberOfCard - 1); //Нужно ли минус один? вроде да
-        Card field[][] = player.getField();
-
-        if (field[xCoord][yCoord] != null) {
-            throw new OccupiedPlaceException("This place if occupied");
-        }
-
-        if (xCoord == 1 && yCoord == 1) {
-            card.newLeader(); 
-        } else {
-            card.newHero();
-        }
-
-        card.setReadyToMove(false);
-        field[xCoord][yCoord] = card;
-        player.setField(field);
-
-        GameStorage.setGame(game);
-        return game;
-    }
-
-
-    /*
-     *  Идея - хранить всех героев в Map<Hero, HeroStatus>, где имя героя ключ, а его значение - его место в игре. 
-     *  Например, если Воин лежит в руке, то map.get(Warrior) = IN_HAND
-     *  Или если он стоит в клетке (1, 2), то map.get(Warrior) = ON_FIELD(1, 2)
-     *  Зачем? Чтобы например при методах moveCard работать не тупо с координатами, из разряда взял из этой клетки, положил в эту,
-     *  а будем именно брать персонажа и класть в какую-то клетку
-     * 
-     *  идея говно, ибо чтобы узнать, что клетка занята - надо будет пройтись по всей Мапе
-     */
-
-    //Возможно стоит обрабатывать, что ввелись координаты вне поля. Т.е. доп. ошибка
-    public Game moveCard(String gameId, String login, Integer xCoord1, Integer yCoord1, Integer xCoord2, Integer yCoord2) throws CardNotFoundException, OccupiedPlaceException, GameNotFound {
-
-        Game game = GameStorage.getInstance().getGame(gameId);
-        Player player = game.getMe(login);
-        Card field[][] = player.getField();
-
-        if (field[xCoord1][yCoord1] == null) {
-            throw new CardNotFoundException("Card not found on field"); //Добавить доп. ошибку на то, что карты нет на поле
-                                                                                //и изменить ошибку, что нет карты на руке
-        } else if (field[xCoord2][yCoord2] != null) {
-            throw new OccupiedPlaceException("This place is occupied");
-        } else if (xCoord1 == 1 && yCoord1 == 1) {
-            throw new OccupiedPlaceException("You can move Leader"); //Исправить на другую ошибку
-        }
-
-        Card card = field[xCoord1][yCoord1];
-
-        if (!card.getReadyToMove()) {
-            throw new OccupiedPlaceException("This hero can't move more in this wave"); //Поменять ошибку
-        }
-
-        field[xCoord1][yCoord1] = null;
-        field[xCoord2][yCoord2] = card;
-        card.setReadyToMove(false);
-        player.setField(field);
-        // game.setCurrentPlayer(player);
-
-        GameStorage.setGame(game);
-        return game;
-    }
-
-    //Метод для удаления тела с поля.
-    public Game deleteBody(String gameId, String login, Integer x, Integer y) throws HeroIsNotDeadException, GameNotFound {
-        Game game = GameStorage.getInstance().getGame(gameId);
-        Player player = game.getMe(login);
-        Card field[][] = player.getField();
-
-        //хранить в карте сразу и героя, и лидера?
-        if (field[x][y].getAlive()) {
-            throw new HeroIsNotDeadException("This Hero is not dead");
-        }
-
-        field[x][y] = null;
-        player.setField(field);
-        // game.setCurrentPlayer(player);
-
-        GameStorage.setGame(game);
-        return game;
-    }
-
-    public Game attackHero(String gameId, String login, Integer x1, Integer y1, Integer x2, Integer y2) throws CardNotFoundException, GameNotFound {
-        System.out.println("WARNING ATTACK:" + x2 + " " + y2);
-        Game game = GameStorage.getInstance().getGame(gameId);
-        Player player = game.getMe(login);
-        Player enemy  = game.getEnemy(login);
-        Card playerField[][] = player.getField();
-        Card enemyField[][] = enemy.getField();
-        //Весь интерфейс получения героя с поля нужно реализовать в классе Player
-        if (playerField[x1][y1] == null) {
-            throw new CardNotFoundException("Card not found");
-        }
-        if (enemyField[x2][y2] == null) {
-            throw new CardNotFoundException("Card not found");
-        }
-
-        Integer wave = game.getCurrentWave();
-        if (y1 != wave - 1 && game.getRound() >= 0) {
-            throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
-        }
-
-        Card playerCard = playerField[x1][y1];
-
-        if (!playerCard.getReadyToMove()) {
-            throw new CardNotFoundException("You cant't attack with this hero this wave");
-        }
-
-        Card enemyCard = enemyField[x2][y2];
-
-
-        enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
-        if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);
-       
-        playerCard.setReadyToMove(false);
-        enemy.setField(enemyField);
-        // game.setCurrentEnemy(enemy);
-
-        GameStorage.setGame(game);
-        return game;
+        Gameplay gameplay = new Gameplay(game);
+        game.setGameplay(gameplay);
+        return gameplay;
     }
 }

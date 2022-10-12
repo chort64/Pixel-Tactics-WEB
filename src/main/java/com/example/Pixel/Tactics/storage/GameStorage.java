@@ -11,12 +11,6 @@ public class GameStorage {
     static private Map<String, Game> gameStorage;
     static private GameStorage instance = null;
 
-
-    //Для тестов
-    public Map<String, Game> getGameStorage() {
-        return gameStorage;
-    }
-
     public GameStorage() {
         gameStorage = new HashMap<>();
     }

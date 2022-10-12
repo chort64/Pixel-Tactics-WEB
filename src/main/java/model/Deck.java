@@ -1,6 +1,5 @@
 package model;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -13,6 +12,7 @@ import lombok.Data;
  *  Сама колода представляет собой стек.
  *  Отдельно реализовал метод взятие карты.
  */
+
 @Data
 public class Deck {
     private Stack<Card> deck = new Stack();
@@ -47,8 +47,6 @@ public class Deck {
         cards.add(new Card(mag1, mage));
         cards.add(new Card(mag2, mage));
         cards.add(new Card(mag3, mage));
-
-        
         //
 
         Collections.shuffle(cards);
