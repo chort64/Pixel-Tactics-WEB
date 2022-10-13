@@ -33,7 +33,7 @@ public class controller {
     
     private final GameService gameService = new GameService();
     private final MoveService moveService = new MoveService();
-    private SimpMessagingTemplate simpMessagingTemplate; //WTF?
+    private SimpMessagingTemplate simpMessagingTemplate; 
 
     @PostMapping("/createGame")
     public ResponseEntity<Game> createNewGame(@RequestBody User user1) {

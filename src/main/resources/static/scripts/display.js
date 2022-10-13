@@ -10,11 +10,11 @@ function getEnemy(data, login) {
 
 function displayWhoMove (data) {
     let wave = data.wave;
-    let moves = data.moves;
+    let numberOfSteps = data.numberOfSteps;
     if (data.whoMove == 0) {
-        $("#whoMove").text("Who move: " + data.player1.login + "   Move: " + moves + "   Wave: " + wave);
+        $("#whoMove").text("Who move: " + data.player1.login + "   Move: " + numberOfSteps + "   Wave: " + wave);
     } else {
-        $("#whoMove").text("Who move: " + data.player2.login + "   Move: " + moves + "   Wave: " + wave);
+        $("#whoMove").text("Who move: " + data.player2.login + "   Move: " + numberOfSteps + "   Wave: " + wave);
     }
 }
 
@@ -117,7 +117,13 @@ function displayMyField(data) {
             } else if (myField[i][j].alive === false) {
                 $("#" + id).text("DEAD");
             } else {
-                $("#" + id).text(myField[i][j].name + "( " + myField[i][j].health + ", " + myField[i][j].damage + ")");
+                let readyToMove;
+                if (myField[i][j].readyToMove && data.wave === j + 1 && playerType == whoMove) {
+                    readyToMove = "ready to move";
+                } else {
+                    readyToMove = "";
+                }
+                $("#" + id).text(myField[i][j].name + "( " + myField[i][j].health + ", " + myField[i][j].damage + ") " + readyToMove);
             }
             document.getElementById(id).style.backgroundColor = 'transparent';
 

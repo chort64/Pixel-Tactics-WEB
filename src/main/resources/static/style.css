@@ -37,6 +37,7 @@ div.card {
     width: 75px;
     height: 103px;
     border: 1px solid black;
+    font-size: 15px;
     /* background-color: purple; */
 }
 

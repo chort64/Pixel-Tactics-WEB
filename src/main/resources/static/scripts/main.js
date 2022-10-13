@@ -187,10 +187,11 @@ for(var i = 0; i < 6; ++i) {
 function displayPossibleCells(i)  {
     console.log("ROUND: " + round);
     if (!gameOn) {}
-    else if (round < 0) {
+    else if (whoMove === playerType) {
+    if (round < 0) {
         var element = document.getElementById("1_4");
         element.style.backgroundColor = "green";
-    } else if (whoMove === playerType) {
+    } else {
         for (var j = 0; j < 3; ++j) {
             var id = j + "_" + (wave + 2);
             console.log(id);
@@ -199,6 +200,7 @@ function displayPossibleCells(i)  {
                 element.style.backgroundColor = 'green';
             }
         }    
+    }
     }
     // else if (whoMove === playerType) {
     //     for (var j = 0; j < 3; ++j) {
