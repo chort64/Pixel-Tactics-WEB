@@ -14,40 +14,38 @@ import model.Game;
 import model.Gameplay;
 import model.Player;
 
-import java.util.ArrayList;
-
 public class MoveService {
-    //МОжет быть куча ошибок неправильного ввода. ДОБАВИТЬ ОШИБКИ!!
     public Gameplay makeMove(String gameId, String login, String move, int... args) throws GameNotFound, MaxCardsInHandException, CardNotFoundException, OccupiedPlaceException, InvalidMove, HeroIsNotDeadException, NotYourMove {
         Game game = GameStorage.getInstance().getGame(gameId);
         Gameplay gameplay = game.getGameplay();
 
-        //TODO: закинуть в отдельную функцию
-        if ((gameplay.getWhoMove() == 0 && !gameplay.getPlayer1().getLogin().equals(login)) 
-        || (gameplay.getWhoMove() == 1 && !gameplay.getPlayer2().getLogin().equals(login))) {
-            throw new NotYourMove("It's not your move");
-        }
+        ExceptionService.canPlayerMoveInThisWave(gameplay, login);
 
+        //Закинуть проверку ошибок мб сюда на активность героя
         switch (move) {
             case ("TAKE_CARD"):
                 takeCard(gameId, login);
                 break;
             case ("PUT_CARD"):
-                 putCard(gameId, login, args[0], args[1], args[2]);
+                ExceptionService.canPlayerPutCard(gameplay, args[1], args[2]);
+                putCard(gameId, login, args[0], args[1], args[2]);
                 break;
             case ("MOVE"): 
+                ExceptionService.leaderCantMoveCheck(args[0], args[1]);
+                ExceptionService.isReadyToMoveThisHero(gameplay.getMe(login), args[0], args[1]);
                 moveCard(gameId, login, args[0], args[1], args[2], args[3]);
                 break;
             case ("ATTACK"):
+                ExceptionService.isReadyToMoveThisHero(gameplay.getMe(login), args[0], args[1]);
                 attackHero(gameId, login, args[0], args[1], args[2], args[3]);
                 break;
             case ("DIG"):
+                ExceptionService.isDeadHeroWithThisCoordinates(gameplay.getMe(login), args[0], args[1]); 
                 deleteBody(gameId,login, args[0], args[1]);
                 break;
             default:
                 throw new InvalidMove("Invalid move");
         }
-        
         gameplay.decreaseNumberOfStepsByOne();
         gameplay.updateAllGameplayValues();
         gameplay.checkWinner();
@@ -70,129 +68,70 @@ public class MoveService {
         Game game = GameStorage.getInstance().getGame(gameId);
         Gameplay gameplay = game.getGameplay();
         Player player = gameplay.getMe(login);
-
-        ArrayList<Card> hand = player.getHand();       //Поменять тип данных с вектора на список?
-        Integer wave = gameplay.getWave();
-
-        if (hand.size() < numberOfCard - 1) {
-            throw new CardNotFoundException("You don't have card with this number");
-        } else if (gameplay.getRound() < 0 && (xCoord != 1 || yCoord != 1)) {
-            throw new CardNotFoundException("Choose leader place"); //Поменять ошибку
-        } else if (yCoord != wave - 1 && gameplay.getRound() >= 0) {
-            throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
-        }
-        
-        Card card = player.takeCardFromHand(numberOfCard - 1); //Нужно ли минус один? вроде да
-        Card field[][] = player.getField();
-
-        if (field[xCoord][yCoord] != null) {
-            throw new OccupiedPlaceException("This place if occupied");
-        }
+        Card card = player.takeCardFromHand(numberOfCard - 1);
 
         if (xCoord == 1 && yCoord == 1) {
-            card.newLeader(); 
+            //Player put leader
+            player.setCardWithCoordinates(xCoord, yCoord, card.newLeader()); 
         } else {
-            card.newHero();
+            //Player put hero
+            player.setCardWithCoordinates(xCoord, yCoord, card.newHero()); 
         }
-
-        card.setReadyToMove(false);
-        field[xCoord][yCoord] = card;
-        player.setField(field);
 
         GameStorage.setGame(game);
         return game;
     }
 
-    //Возможно стоит обрабатывать, что ввелись координаты вне поля. Т.е. доп. ошибка
     public Game moveCard(String gameId, String login, Integer xCoord1, Integer yCoord1, Integer xCoord2, Integer yCoord2) throws CardNotFoundException, OccupiedPlaceException, GameNotFound {
 
         Game game = GameStorage.getInstance().getGame(gameId);
         Gameplay gameplay = game.getGameplay();
         Player player = gameplay.getMe(login);
-        Card field[][] = player.getField();
 
-        if (field[xCoord1][yCoord1] == null) {
-            throw new CardNotFoundException("Card not found on field"); //Добавить доп. ошибку на то, что карты нет на поле
-                                                                                //и изменить ошибку, что нет карты на руке
-        } else if (field[xCoord2][yCoord2] != null) {
-            throw new OccupiedPlaceException("This place is occupied");
-        } else if (xCoord1 == 1 && yCoord1 == 1) {
-            throw new OccupiedPlaceException("You can move Leader"); //Исправить на другую ошибку
-        }
+        Card card = player.getCardWithCoordinates(xCoord1, yCoord1);
 
-        Card card = field[xCoord1][yCoord1];
-
-        if (!card.getReadyToMove()) {
-            throw new OccupiedPlaceException("This hero can't move more in this wave"); //Поменять ошибку
-        }
-
-        field[xCoord1][yCoord1] = null;
-        field[xCoord2][yCoord2] = card;
+        player.setCardWithCoordinates(xCoord1, yCoord1, null);
+        player.setCardWithCoordinates(xCoord2, yCoord2, card);
         card.setReadyToMove(false);
-        player.setField(field);
-        // game.setCurrentPlayer(player);
 
         GameStorage.setGame(game);
         return game;
     }
 
-    //Метод для удаления тела с поля.
-    public Game deleteBody(String gameId, String login, Integer x, Integer y) throws HeroIsNotDeadException, GameNotFound {
+    public Game deleteBody(String gameId, String login, Integer x, Integer y) throws HeroIsNotDeadException, GameNotFound, CardNotFoundException, OccupiedPlaceException {
         Game game = GameStorage.getInstance().getGame(gameId);
         Gameplay gameplay = game.getGameplay();
         Player player = gameplay.getMe(login);
-        Card field[][] = player.getField();
-
-        //хранить в карте сразу и героя, и лидера?
-        if (field[x][y].getAlive()) {
-            throw new HeroIsNotDeadException("This Hero is not dead");
-        }
-
-        field[x][y] = null;
-        player.setField(field);
+        
+        player.setCardWithCoordinates(x, y, null);
 
         GameStorage.setGame(game);
         return game;
     }
 
-    public Game attackHero(String gameId, String login, Integer x1, Integer y1, Integer x2, Integer y2) throws CardNotFoundException, GameNotFound {
+    public Game attackHero(String gameId, String login, Integer x1, Integer y1, Integer x2, Integer y2) throws CardNotFoundException, GameNotFound, OccupiedPlaceException {
         Game game = GameStorage.getInstance().getGame(gameId);
         Gameplay gameplay = game.getGameplay();
         Player player = gameplay.getMe(login);
         Player enemy  = gameplay.getEnemy(login);
-        Card playerField[][] = player.getField();
-        Card enemyField[][] = enemy.getField();
-        //Весь интерфейс получения героя с поля нужно реализовать в классе Player
-        if (playerField[x1][y1] == null) {
-            throw new CardNotFoundException("Card not found");
-        }
-        if (enemyField[x2][y2] == null) {
-            throw new CardNotFoundException("Card not found");
-        }
+        Card playerCard = player.getCardWithCoordinates(x1, y1);
+        Card enemyCard = enemy.getCardWithCoordinates(x2, y2);
 
         Integer wave = gameplay.getWave();
+        
+        //ToDo: перекинуть в ExceptionService как отдельный чек
         if (y1 != wave - 1 && gameplay.getRound() >= 0) {
             throw new CardNotFoundException("You can't move on this wave"); //ПОменять ошибку
         }
 
-        Card playerCard = playerField[x1][y1];
-
-        if (!playerCard.getReadyToMove()) {
-            throw new CardNotFoundException("You cant't attack with this hero this wave");
-        }
-
-        Card enemyCard = enemyField[x2][y2];
-
+        ExceptionService.isReadyToMoveThisHero(player, x1, y1);
 
         enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
         if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);
        
         playerCard.setReadyToMove(false);
-        enemy.setField(enemyField);
-        // game.setCurrentEnemy(enemy);
 
         GameStorage.setGame(game);
         return game;
     }
- 
 }

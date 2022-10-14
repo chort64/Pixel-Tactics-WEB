@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.example.Pixel.Tactics.exception.CardNotFoundException;
 import com.example.Pixel.Tactics.exception.MaxCardsInHandException;
+import com.example.Pixel.Tactics.exception.OccupiedPlaceException;
 
 import lombok.Data;
 
@@ -60,5 +61,22 @@ public class Player {
         for (Card[] row : field)
             for (Card card : row)
                 if (card != null) card.setReadyToMove(true);
+    }
+
+    public Card getCardWithCoordinates(Integer x, Integer y) throws CardNotFoundException {
+        if (x < 0 || x > 2 || y < 0 || y > 2) {
+            throw new CardNotFoundException("You can't take card on this cell");
+        }
+        return field[x][y];
+    }
+    
+    public void setCardWithCoordinates(Integer x, Integer y, Card card) throws OccupiedPlaceException, CardNotFoundException {
+        if (x < 0 || x > 2 || y < 0 || y > 2) {
+            throw new CardNotFoundException("You can move on this cell"); //ToDo: мб заменить ошибку
+        }
+        else if (field[x][y] != null) {
+            throw new OccupiedPlaceException("This place if occupied");
+        }
+        field[x][y] = card;
     }
 }

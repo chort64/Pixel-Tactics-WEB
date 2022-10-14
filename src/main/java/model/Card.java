@@ -25,19 +25,21 @@ public class Card {
         this.leader = leader;
     }
 
-    public void newHero() {
+    public Card newHero() {
         alive = true;
-        readyToMove = true;
+        readyToMove = false;
         this.name = this.hero.getName();
         this.health = this.hero.getHealth();
         this.damage = this.hero.getDamage();
+        return this;
     }
 
-    public void newLeader() {
+    public Card newLeader() {
         alive = true;
-        readyToMove = true;
+        readyToMove = false;
         this.name = this.leader.getName();
         this.health = this.leader.getHealth();
         this.damage = this.leader.getDamage();
+        return this;
     }
 }
