@@ -21,7 +21,9 @@ public class MoveService {
 
         ExceptionService.canPlayerMoveInThisWave(gameplay, login);
 
-        //Закинуть проверку ошибок мб сюда на активность героя
+        //ToDo: 
+        //  - закинуть сюда ошибку на готовность ходить героя в эту волну
+        //  - Подумать, как проработать изменения состояние readyToMove
         switch (move) {
             case ("TAKE_CARD"):
                 takeCard(gameId, login);
@@ -126,7 +128,10 @@ public class MoveService {
 
         ExceptionService.isReadyToMoveThisHero(player, x1, y1);
 
+        //ToDO: Добавить метод decreaseHealth
         enemyCard.setHealth(enemyCard.getHealth() - playerCard.getDamage());
+
+        //ToDO: Добавить метод на проверку 'живности' героя
         if (enemyCard.getHealth() <= 0) enemyCard.setAlive(false);
        
         playerCard.setReadyToMove(false);

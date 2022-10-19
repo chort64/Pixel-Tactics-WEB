@@ -29,6 +29,10 @@ public class GameStorage {
         return gameStorage.get(login);
     }
 
+    public Map<String, Game> getGameStorage() {
+        return gameStorage;
+    }
+
     static public void setGame(Game game) {
         gameStorage.put(game.getGameId(), game);
     }

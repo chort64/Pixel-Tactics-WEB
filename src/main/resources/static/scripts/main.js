@@ -24,6 +24,7 @@ function connectToSocket(gameId) {
 
     console.log("connecting to the game");
     let socket = new SockJS(url + "/gameplay"); //Нихуя не понятно, почему ссылка на /gameplay
+                                                //(Понял почему)
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log("connected to the frame: " + frame);
@@ -43,7 +44,6 @@ function connectToSocket(gameId) {
             displayEnemyLogin(data);
             displayMyLogin(data);
             displayMyHand(data);
-            // displayEnemyHand(data);
             displayMyField(data);
             displayEnemyField(data);
             displayCountOfMyDeck(data);
@@ -104,6 +104,7 @@ function connect_game() {
                 "user": {
                     "login": login
                 },
+                
                 "gameId": gameId
             }),
             success: function (data) {
@@ -202,17 +203,6 @@ function displayPossibleCells(i)  {
         }    
     }
     }
-    // else if (whoMove === playerType) {
-    //     for (var j = 0; j < 3; ++j) {
-    //         for (var k = 3; k < 6; ++k) {
-    //             var id = j + "_" + k;
-    //             var element = document.getElementById(id);
-    //             if (element.innerText === "") {
-    //                 element.style.backgroundColor = 'green';
-    //             }
-    //         }
-    //     }    
-    // }
 }
 
 function reset() {

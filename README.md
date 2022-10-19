@@ -1,6 +1,9 @@
 # Pixel-Tactics-WEB
 Transferring the "Pixel tactics" board game to the browser
 
+## Status : writing frontend on React
+
+<!-- 
 # DOTO List.
 
 ## Make a prototype:
@@ -25,14 +28,18 @@ Transferring the "Pixel tactics" board game to the browser
     - [ ] Make some animation (possibly)
     
 ## Refactoring:
-- [ ] Rewrite Player Class
+- [x] Rewrite Player Class
+- [x] Divide GameService on GameService and MoveService 
+- [x] Add ExceptionService for exceptions check
+- [ ] Change principe of choosing current player (Now it's work through logins equals (criinge))
+
 
 ## Big changes for V2.0 :
   - [ ] Rewrite all Backend part (with patterns and new logic of code)
   - [ ] Rewrite all Frontend pard (control the status of game through updated data from socket (not it's work with text in div's kek))    
+    - [ ] Use Fetch.js for Http requests 
     - [ ] MayBe use js framework like react, vue and etc.
   - [ ] Add portal page
   - [ ] Add DataBases for gameStorage, userStorage
   - [ ] Add Spring Security
-  - [ ] Maybe change STOMP on WebSocket
-  - [ ] Add chat to game page
+  - [ ] Add chat to game page -->

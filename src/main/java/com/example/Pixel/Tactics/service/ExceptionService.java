@@ -27,8 +27,6 @@ public class ExceptionService {
 
     static public void canPlayerPutCard(Gameplay gameplay, Integer xCoord, Integer yCoord) throws CardNotFoundException {
         if (gameplay.getRound() < 0 && (xCoord != 1 || yCoord != 1)) {
-            System.out.println(xCoord);
-            System.out.println(yCoord);
             throw new CardNotFoundException("Choose leader place"); 
         } else if (yCoord != gameplay.getWave() - 1 && gameplay.getRound() >= 0) {
             throw new CardNotFoundException("You can't move on this wave"); 

@@ -2,6 +2,7 @@ package com.example.Pixel.Tactics.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +27,10 @@ import model.Game;
 import model.Gameplay;
 import model.User;
 
-@RestController
+@RestController 
 @AllArgsConstructor
 @RequestMapping("/game")
+@CrossOrigin
 public class controller {
     
     private final GameService gameService = new GameService();
@@ -44,7 +46,15 @@ public class controller {
     @PostMapping("/connectToGame")
     public ResponseEntity<Gameplay> ConnectToGame(@RequestBody ConnectRequest request) throws GameIsFullException, GameNotFound, LoginIsBusy {
         Gameplay gameplay = gameService.connectToGame(request.getUser(), request.getGameId());
-        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + request.getGameId(), gameplay); //что
+        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + request.getGameId(), gameplay); 
+        return ResponseEntity.ok(gameplay);
+    }
+
+    @PostMapping("/randomGame")
+    public ResponseEntity<Gameplay> randomGame(@RequestBody User user) throws GameIsFullException, GameNotFound, LoginIsBusy {
+        Game game = gameService.getRandomGame(user);
+        Gameplay gameplay = gameService.connectToGame(user, game.getGameId());
+        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getGameId(), gameplay); 
         return ResponseEntity.ok(gameplay);
     }
 

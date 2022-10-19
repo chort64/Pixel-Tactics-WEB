@@ -80,13 +80,13 @@ public class Gameplay {
     // Method for getting your player
     public Player getMe(String login) {
         if (login.equals(player1.getLogin())) return player1;
-        else                                  return player2;
+        else return player2;
     }
 
     // Method for getting your enemy player
     public Player getEnemy(String login) {
         if (login.equals(player1.getLogin())) return player2;
-        else                                  return player1;
+        else return player1;
     }
 
 }
