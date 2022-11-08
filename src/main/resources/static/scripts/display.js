@@ -10,7 +10,7 @@ function getEnemy(data, login) {
 
 function displayWhoMove (data) {
     let wave = data.wave;
-    let numberOfSteps = data.numberOfSteps;
+    let numberOfSteps = data.remainingNumberOfMoves;
     if (data.whoMove == 0) {
         $("#whoMove").text("Who move: " + data.player1.login + "   Move: " + numberOfSteps + "   Wave: " + wave);
     } else {

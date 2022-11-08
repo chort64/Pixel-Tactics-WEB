@@ -18,6 +18,8 @@ public class Card {
     private String name;
     private Integer health;
     private Integer damage;
+    private Boolean isMelee;
+    private Boolean interception;
     private Boolean readyToMove;
 
     public Card(Hero hero, Leader leader) {
@@ -31,6 +33,8 @@ public class Card {
         this.name = this.hero.getName();
         this.health = this.hero.getHealth();
         this.damage = this.hero.getDamage();
+        this.isMelee = this.hero.getIsMelee();
+        this.interception = this.hero.getInterception();
         return this;
     }
 
@@ -40,6 +44,8 @@ public class Card {
         this.name = this.leader.getName();
         this.health = this.leader.getHealth();
         this.damage = this.leader.getDamage();
+        this.isMelee = this.leader.getIsMelee();
+        this.interception = this.leader.getInterception();
         return this;
     }
 }

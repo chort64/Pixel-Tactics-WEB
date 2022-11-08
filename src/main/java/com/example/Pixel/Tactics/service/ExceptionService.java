@@ -19,7 +19,7 @@ public class ExceptionService {
              ( gameplay.getWhoMove() == 1 
                && !gameplay.getPlayer2().getLogin().equals(login)
              )
-            ) 
+           ) 
         {
             throw new NotYourMove("It's not your move");
         }

@@ -10,4 +10,6 @@ public class Hero {
     private String name;
     private Integer health;
     private Integer damage;
+    private Boolean isMelee;
+    private Boolean interception;
 }

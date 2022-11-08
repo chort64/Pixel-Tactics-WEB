@@ -9,4 +9,6 @@ public class Leader {
     private String name;
     private Integer health;
     private Integer damage;
+    private Boolean isMelee;
+    private Boolean interception;
 }

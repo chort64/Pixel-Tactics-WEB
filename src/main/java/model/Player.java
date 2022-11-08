@@ -7,6 +7,7 @@ import com.example.Pixel.Tactics.exception.MaxCardsInHandException;
 import com.example.Pixel.Tactics.exception.OccupiedPlaceException;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  *   Класс Player - это модель игрока с картами, которая 
@@ -16,12 +17,14 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
 public class Player {
 
-    String login;
-    ArrayList<Card> hand;
-    Card field[][];
-    Deck deck;
+    private String login;
+    private ArrayList<Card> hand;
+    private Card field[][];
+    private Deck deck;
+    private Integer playerNumber;
 
     public Player(User user) {
         login = user.getLogin();
@@ -74,7 +77,7 @@ public class Player {
         if (x < 0 || x > 2 || y < 0 || y > 2) {
             throw new CardNotFoundException("You can move on this cell"); //ToDo: мб заменить ошибку
         }
-        else if (field[x][y] != null) {
+        else if (field[x][y] != null && card != null) {
             throw new OccupiedPlaceException("This place if occupied");
         }
         field[x][y] = card;

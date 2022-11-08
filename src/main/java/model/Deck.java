@@ -20,21 +20,21 @@ public class Deck {
     public Deck() {
         //Test
         List<Card> cards = new ArrayList();
-        Hero war1 = new Hero(true, "War1", 10, 4);
-        Hero war2 = new Hero(true, "War2", 10, 4);
-        Hero war3 = new Hero(true, "War3", 10, 4);
+        Hero war1 = new Hero(true, "War1", 10, 4, true, false);
+        Hero war2 = new Hero(true, "War2", 10, 4, true, false);
+        Hero war3 = new Hero(true, "War3", 10, 4, true, false);
 
-        Hero arc1 = new Hero(true, "Arc1", 3, 6);
-        Hero arc2 = new Hero(true, "Arc2", 3, 6);
-        Hero arc3 = new Hero(true, "Arc3", 3, 6);
+        Hero arc1 = new Hero(true, "Arc1", 3, 6, false, false);
+        Hero arc2 = new Hero(true, "Arc2", 3, 6, false, false);
+        Hero arc3 = new Hero(true, "Arc3", 3, 6, false, false);
 
-        Hero mag1 = new Hero(true, "Mag1", 1, 8);
-        Hero mag2 = new Hero(true, "Mag2", 1, 8);
-        Hero mag3 = new Hero(true, "Mag3", 1, 8);
+        Hero mag1 = new Hero(true, "Mag1", 1, 8, false, false);
+        Hero mag2 = new Hero(true, "Mag2", 1, 8, false, false);
+        Hero mag3 = new Hero(true, "Mag3", 1, 8, false, false);
 
-        Leader warrior = new Leader(true, "Warrior", 30, 5);
-        Leader archer = new Leader(true, "Archer", 20, 5);
-        Leader mage = new Leader(true, "Mage", 10, 10);
+        Leader warrior = new Leader(true, "Warrior", 30, 5, false, false);
+        Leader archer = new Leader(true, "Archer", 20, 5, false, false);
+        Leader mage = new Leader(true, "Mage", 10, 10, false, false);
 
         cards.add(new Card(war1, warrior));
         cards.add(new Card(war2, warrior));

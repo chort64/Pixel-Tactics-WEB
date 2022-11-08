@@ -14,79 +14,85 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <input id="login" placeholder="Place a login here">
-    <button onclick="create_game()">Create a new game</button>
-    <input id="game_id" placeholder="Place a game id">
-    <button onclick="connect_game()">Connect to game</button>
-    <!-- Рука противника -->
-    <div class="container">
-        <div class="enemy-hand row justify-content-center">
-            <div class="deck card " id="e_deck"></div>
-
-            <div class="card" id="e_1"></div>
-            <div class="card" id="e_2"></div>
-            <div class="card" id="e_3"></div>
-            <div class="card" id="e_4"></div>
-            <div class="card" id="e_5"></div>
-
-            <div class="order card " id="e_order">ORDER</div>
-        </div>
+    <div id="start_page">
+        <input id="login" placeholder="Place a login here">
+        <button onclick="create_game()">Create game</button>
+        <input id="game_id" placeholder="Place a game id">
+        <button onclick="connect_game()">Connect to game</button>
+        <button onclick="random_game()">Random</button>
     </div>
 
-    <div id="enemy-login" class="login">Login:</div>
-    <div id="whoMove">Who move: , Moves: , Wave: </div>
-    <!-- Общее Поле -->
-    <div class="field">
+    <div id = "game_page">
+        <!-- Рука противника -->
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="hand card field-card e-card" id="0_0"></div>
-                <div class="hand card field-card e-card" id="0_1"></div>
-                <div class="hand card field-card e-card" id="0_2"></div>
-                <div class="hand card field-card first my-card" id="0_3"></div>
-                <div class="hand card field-card my-card" id="0_4"></div>
-                <div class="hand card field-card my-card" id="0_5"></div>
-            </div>
-        </div>
-        
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="hand card field-card e-card" id="1_0"></div>
-                <div class="hand card field-card e-card" id="1_1"></div>
-                <div class="hand card field-card e-card" id="1_2"></div>
-                <div class="hand card field-card first my-card" id="1_3"></div>
-                <div class="hand card field-card my-card" id="1_4"></div>
-                <div class="hand card field-card my-card" id="1_5"></div>
+            <div class="enemy-hand row justify-content-center">
+                <div class="deck card " id="e_deck"></div>
+
+                <div class="card" id="e_1"></div>
+                <div class="card" id="e_2"></div>
+                <div class="card" id="e_3"></div>
+                <div class="card" id="e_4"></div>
+                <div class="card" id="e_5"></div>
+
+                <div class="order card " id="e_order">ORDER</div>
             </div>
         </div>
 
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="hand card field-card e-card" id="2_0"></div>
-                <div class="hand card field-card e-card" id="2_1"></div>
-                <div class="hand card field-card e-card" id="2_2"></div>
-                <div class="hand card field-card first my-card" id="2_3"></div>
-                <div class="hand card field-card my-card" id="2_4"></div>
-                <div class="hand card field-card my-card" id="2_5"></div>
+        <div id="enemy-login" class="login">Login:</div>
+        <div id="whoMove">Who move: , Moves: , Wave: </div>
+        <!-- Общее Поле -->
+        <div class="field">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="hand card field-card e-card" id="0_0"></div>
+                    <div class="hand card field-card e-card" id="0_1"></div>
+                    <div class="hand card field-card e-card" id="0_2"></div>
+                    <div class="hand card field-card first my-card" id="0_3"></div>
+                    <div class="hand card field-card my-card" id="0_4"></div>
+                    <div class="hand card field-card my-card" id="0_5"></div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div id="my-login" class="login">Login:</div>
-    <button onclick="reset()" class="reset">RESET</button>
-    <button onclick="dig()">DIG</button>
-
-    <!-- Моя рука -->
-    <div class = container>
-        <div class="my-hand row justify-content-center">
-            <div class="deck card " id="m_deck"></div>
             
-            <div class="hand card my-hand-card" id="m_1"></div>
-            <div class="hand card my-hand-card" id="m_2"></div>
-            <div class="hand card my-hand-card" id="m_3"></div>
-            <div class="hand card my-hand-card" id="m_4"></div>
-            <div class="hand card my-hand-card" id="m_5"></div>
-            
-            <div class="order card " id="m_order">ORDER</div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="hand card field-card e-card" id="1_0"></div>
+                    <div class="hand card field-card e-card" id="1_1"></div>
+                    <div class="hand card field-card e-card" id="1_2"></div>
+                    <div class="hand card field-card first my-card" id="1_3"></div>
+                    <div class="hand card field-card my-card" id="1_4"></div>
+                    <div class="hand card field-card my-card" id="1_5"></div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="hand card field-card e-card" id="2_0"></div>
+                    <div class="hand card field-card e-card" id="2_1"></div>
+                    <div class="hand card field-card e-card" id="2_2"></div>
+                    <div class="hand card field-card first my-card" id="2_3"></div>
+                    <div class="hand card field-card my-card" id="2_4"></div>
+                    <div class="hand card field-card my-card" id="2_5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="my-login" class="login">Login:</div>
+        <button onclick="reset()" class="reset">RESET</button>
+        <button onclick="dig()">DIG</button>
+
+        <!-- Моя рука -->
+        <div class = container>
+            <div class="my-hand row justify-content-center">
+                <div class="deck card " id="m_deck"></div>
+                
+                <div class="hand card my-hand-card" id="m_1"></div>
+                <div class="hand card my-hand-card" id="m_2"></div>
+                <div class="hand card my-hand-card" id="m_3"></div>
+                <div class="hand card my-hand-card" id="m_4"></div>
+                <div class="hand card my-hand-card" id="m_5"></div>
+                
+                <div class="order card " id="m_order">ORDER</div>
+            </div>
         </div>
     </div>
     <script src="./scripts/display.js"></script>

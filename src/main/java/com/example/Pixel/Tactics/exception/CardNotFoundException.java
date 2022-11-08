@@ -1,7 +1,5 @@
 package com.example.Pixel.Tactics.exception;
 
-import javax.swing.tree.ExpandVetoException;
-
 public class CardNotFoundException extends Exception{
     String message;
 

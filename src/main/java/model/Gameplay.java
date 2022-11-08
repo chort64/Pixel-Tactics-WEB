@@ -12,11 +12,13 @@ import lombok.Setter;
 @Setter
 public class Gameplay {
     
+    private String gameId;
     private Integer turn;      
     private Integer whoMove;  
     private Integer wave;
     private Integer round;
-    private Integer numberOfSteps;
+    private Integer initialNumberOfMoves = 2;
+    private Integer remainingNumberOfMoves;
     private Player player1;
     private Player player2;
     private String winner;
@@ -26,13 +28,14 @@ public class Gameplay {
         whoMove = turn;
         wave = 1;
         round = -1;
-        numberOfSteps = 1;
+        remainingNumberOfMoves = 1;
         player1 = new Player(game.getUser1());
         player2 = new Player(game.getUser2());
+        this.gameId = game.getGameId();
     }
 
-    public void decreaseNumberOfStepsByOne(){
-        numberOfSteps = numberOfSteps - 1;
+    public void decreaseNumberOfMovesByOne(){
+        remainingNumberOfMoves = remainingNumberOfMoves - 1;
     }
 
     public void updateAllGameplayValues() {
@@ -40,10 +43,10 @@ public class Gameplay {
             chooseLeaderRound();
         }
 
-        if (numberOfSteps == 0) {
+        if (remainingNumberOfMoves == 0) {
             player1.updateCardsStatus();  // Вынести бы как нибудь
             player2.updateCardsStatus();  //
-            numberOfSteps = 2;
+            remainingNumberOfMoves = initialNumberOfMoves;
             whoMove = (whoMove + 1) % 2;
             if (whoMove == turn) {
                 wave = wave + 1;
@@ -61,10 +64,10 @@ public class Gameplay {
     public void chooseLeaderRound() {
         whoMove = (whoMove + 1) % 2;
         if (turn == whoMove) {
-            numberOfSteps = 2;
+            remainingNumberOfMoves = 2;
             round = 1;
         } else {
-            numberOfSteps = 1;
+            remainingNumberOfMoves = 1;
         }
     }
 

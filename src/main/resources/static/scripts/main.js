@@ -1,4 +1,3 @@
-
 const url = 'http://localhost:8080';
 
 let playerLogin;
@@ -20,6 +19,8 @@ let choosenCellOnField = [];
 var my_hand_card = []; 
 let digBody = false;
 
+
+
 function connectToSocket(gameId) {  
 
     console.log("connecting to the game");
@@ -31,7 +32,7 @@ function connectToSocket(gameId) {
         stompClient.subscribe("/topic/game-progress/" + gameId, function (response) {
             console.log("CHECK SOCKET");
             let data = JSON.parse(response.body);
-            console.log(data);
+            // console.log(data);
             console.log("WHOMOVE" + data.whoMove);
             if (data.winner != null) {
                 alert("Winner is " + data.winner);
@@ -65,16 +66,20 @@ function create_game() {
                 "login": login
             }),
             success: function (data) {
+                $("#start_page").css({"visibility": "hidden"});
+                $("#game_page").css({"visibility": "visible"});
                 gameID = data.gameId;
                 currentData = data;
                 playerType = 0;
                 console.log(playerType);
                 playerLogin = login;
                 whoMove = data.whoMove;
+                $("#" + "my-login").text("Login:" + playerLogin);
+                $("#" + "enemy-login").text("Login: Waiting enemy");
+                // displayMyLogin(data);
                 connectToSocket(gameID);
                 console.log(gameID);
                 alert("Your created a game. Game id is: " + data.gameId);
-                // waitUser(data.gameId);
             },
             error: function (error) {
                 console.log(error);
@@ -82,8 +87,6 @@ function create_game() {
         })
     }
 }   
-
-// ЛЮБЛЮ ТЕБЯ, МОЙ САМЫЙ ЛУЧШИЙ И САМЫЙ ЛЮБИМЫЙ!!!!!!!
 
 function connect_game() {
     let login = document.getElementById("login").value;
@@ -108,6 +111,8 @@ function connect_game() {
                 "gameId": gameId
             }),
             success: function (data) {
+                $("#start_page").css({"visibility": "hidden"});
+                $("#game_page").css({"visibility": "visible"});
                 playerLogin = login;
                 if (data.player1.login === login) {
                     playerLogin = login + "(1)";
@@ -134,12 +139,51 @@ function connect_game() {
     }
 }
 
-// function makeMove(args) {
 
-// }
+function random_game() {
+    let login = document.getElementById("login").value;
+    if (login == null || login === '') {
+        alert("Please enter login");
+    }
+    else {
+        $.ajax({
+            url: url + "/game/randomGame",
+            type: 'POST',
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "login": login
+            }),
+            success: function (data) {
+                $("#start_page").css({"visibility": "hidden"});
+                $("#game_page").css({"visibility": "visible"});
+                playerLogin = login;
+                console.log(login);
+                gameID = data.gameId;
+                console.log("CHECK AGMEID: "+ gameID);
+                playerType = 1;
+                whoMove = data.whoMove;
+                displayWhoMove(data);
+                console.log(playerType);
+                displayEnemyLogin(data);
+                displayMyLogin(data);
+                displayMyHand(data);
+                displayCountOfEnemyDeck(data);
+                displayCountOfMyDeck(data);
+                my_hand_card = document.querySelectorAll(".my-hand-card"); 
+                console.log(gameID);
+                connectToSocket(gameID);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+}
 
 $("#m_deck").click(function (){
     var deck = document.getElementById("m_deck");
+    //Сделать не через парсинг текста, а через getter с текущих данных
     var text = deck.innerHTML.split(":")[1];  //число оставшихся карт
 
     if (playerType != whoMove) {}

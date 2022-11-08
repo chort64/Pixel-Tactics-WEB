@@ -66,7 +66,7 @@ public class controller {
                                                 , request.getX2(), request.getY2() 
                                                 );
                                                 
-        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + request.getGameId(), gameplay); //что
+        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + request.getGameId(), gameplay); 
         return ResponseEntity.ok(gameplay);
     }
 }

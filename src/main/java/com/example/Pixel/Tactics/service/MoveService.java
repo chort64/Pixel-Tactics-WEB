@@ -45,10 +45,14 @@ public class MoveService {
                 ExceptionService.isDeadHeroWithThisCoordinates(gameplay.getMe(login), args[0], args[1]); 
                 deleteBody(gameId,login, args[0], args[1]);
                 break;
+            case ("USE_SPELL") :
+                break;
+            case ("USE_ORDER") :
+                break;
             default:
                 throw new InvalidMove("Invalid move");
         }
-        gameplay.decreaseNumberOfStepsByOne();
+        gameplay.decreaseNumberOfMovesByOne();
         gameplay.updateAllGameplayValues();
         gameplay.checkWinner();
 
